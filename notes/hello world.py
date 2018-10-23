@@ -1,1 +1,27 @@
-print("hey whats up guys its god here back with another creating life tutorial episode 12. Today we will be looking at alligators")
+print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+#  This is a comment with no effect on code
+# But I can:
+# 1. Make notes to myself
+# 2. Comment pieces of code that do not work
+# 3. Make my code easier to read
+print("Look at what happens here. Is there any space?")
+print()
+print()
+print("There should be a couple of blank lines here.")
+yoink=2
+yeet=2
+
+#Math
+print(3+5)
+print(5-2)
+print(3*4)
+print(6/2)
+print()
+print("Figure this out...")
+print(6//2)
+print(5//2)
+print(9//4)
+print()
+print(6%2)
+print(5%2)
+print(11%4) # Modulus (Remainder)
