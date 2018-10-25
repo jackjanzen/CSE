@@ -28,7 +28,7 @@ print(11%4) # Modulus (Remainder)
 print()
 #variables for text
 name=input("What is your name?")
-print("Hello Daddy %s" % name)
+print("Hello %s" % name)
 age=input("How old are you? >_")
 print("%s?!? You belong in a museum." % age)
 print("%s is really old. They are %s years old." % (name,age))
@@ -71,6 +71,9 @@ print("I AM ALWAYS WATCHING.")
 print("I AM ALWAYS WATCHING.")
 print("I AM ALWAYS WATCHING.")
 
+print()
+print()
+print("Now back to your regularly scheduled program.")
 
 
 
