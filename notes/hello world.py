@@ -129,7 +129,7 @@ say_it()
 say_it()
 say_it()
 
-# Loops
+# For Loops
 """
 for i in range(10000):
     say_it()
@@ -139,6 +139,48 @@ for i in range(1000000):
 
 
 # While Loops
+a = 1
+while a < 2048:
+    print(a)
+    a += 2
+""" 
+at the moment you start the loop:
+For loops- use when you know exactly how many iterations
+While loops - Use when you done know how many iterations
+"""
+
+# if statements
+
+sunny = False
+if sunny:
+    print("Go outside")
 
 
+def grade_calc (percentage):
+    if percentage >= 90:
+        return "A"
+    elif percentage >= 80:
+        return "B"
+    elif percentage >= 70:
+        return "C"
+    elif percentage >= 60:
+        return "D"
+    else:
+        return "F"
+
+
+yourgrade = grade_calc(82)
+print(yourgrade)
+
+
+# Equality Statements
+print(5 > 3)
+print(5 >= 3)
+print(3 == 3)
+print(3 != 4)
+"""
+
+a = 3 # A is set to 3
+a == 3 # Is a equal to 3?
+"""
 
