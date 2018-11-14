@@ -2,7 +2,7 @@ import random
 guesslft = 6
 wordlist = ["wiebe", "tiger", "edison", "school", "death", "underworld", "class", "prison", "help", "pain"]
 wordlist.append("donuts")
-
+guessdltrs = []
 print("Welcome to Hangman!")
 print("You have 6 guesses to figure out what the word is by guessing letters.")
 print("When you guess a letter, it does not count as a guess.")
@@ -13,6 +13,8 @@ word_listform = list(word)
 letterlft = len(word_listform)
 print(word)
 print(word_listform)
+disp_list = "_ " * len(word)
+print(disp_list)
 while guesslft > 0 and letterlft > 0:
     print("Guesses left: %d" % guesslft)
     print("Letters left: %d" % letterlft)
@@ -31,4 +33,3 @@ if letterlft <= 0:
     print("You Won!")
 
 print("The word was: %s" % word)
-
