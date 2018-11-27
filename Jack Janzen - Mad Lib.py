@@ -1,4 +1,4 @@
-"""
+
 phenom1 = input("Phenomenon?")
 verb1 = input("Verb?")
 noun1 = input("Noun?")
@@ -43,9 +43,3 @@ print("The fact that such a famous place could come that close to having no wate
 print("What place is next? %s? %s? %s?" % (place3, place4, place5))
 print("%s is a dangerously unpredictable issue, and it needs to be addressed before the "
       "whole world runs out, and a mass death on a %s scale occurs." % (phenom2, phenom3))
-"""
-
-
-
-
-

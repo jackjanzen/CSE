@@ -24,4 +24,3 @@ while turn < 5:
             print("You Lost.")
         else:
             print("Higher.")
-

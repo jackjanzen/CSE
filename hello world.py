@@ -83,7 +83,7 @@ print()
 print()
 print("Now back to your regularly scheduled program.")
 '''
-
+"""
 # functions
 
 
@@ -130,12 +130,12 @@ say_it()
 say_it()
 
 # For Loops
-"""
+
 for i in range(10000):
     say_it()
 for i in range(1000000):
     print(i+1)
-"""
+
 
 
 # While Loops
@@ -143,11 +143,11 @@ a = 1
 while a < 2048:
     print(a)
     a += 2
-""" 
+
 at the moment you start the loop:
 For loops- use when you know exactly how many iterations
 While loops - Use when you done know how many iterations
-"""
+
 
 # if statements
 
@@ -178,9 +178,66 @@ print(5 > 3)
 print(5 >= 3)
 print(3 == 3)
 print(3 != 4)
-"""
+
 
 a = 3 # A is set to 3
 a == 3 # Is a equal to 3?
+"""
+
+colors = ["blue", "turquoise", "pink"]
+print(colors)
+lol = 0
+sevlist = ["there", "are", "seven", "items", "in", "this", "list"]
+sevlist[2] = "7"
+print(sevlist[2])
+print("The last thing in the list is %s." % sevlist[len(sevlist) - 1])
+print(sevlist[1:3])
+
+foodlist = ["tacos", "salad", "chocolate", "pie", "apples", "apple pie", "peach cobbler", "yogurt",
+            "chips", "ice (for those with an iron deficiency)", "mac n' cheese",
+            "pear", "ice cream", "popsicles", "lolipops", "maple syrup", "rocks",
+            "fettuccine", "pizza", "turkey"]
+print(len(foodlist))
+foodlist.append("bacon")
+foodlist.append("eggs")
+print(foodlist)
+
+foodlist.insert(1, "eggo waffles")
+print(foodlist)
+
+foodlist.remove("salad")
+print(foodlist)
+
+threelist = ["Wow!", "Three", "items"]
+print(threelist)
+threelist.append("exactly!")
+threelist[1] = "Four"
+print(threelist)
+threelist.remove("Wow!")
+threelist[0] = "Three"
+print(threelist)
+
+# pop is the insert version of removing things
+print(foodlist)
+foodlist.pop(0)
+print(foodlist)
+
+string1 = "turquoise"
+list1 = list(string1)
+print(list1)
+print("".join(list1))
+for i in range(len(list1)):
+    if list1[i] == "u":
+        list1.pop(i)
+        list1.insert(i, "*")
+print("".join(list1))
+
+"""
+for character is list1:
+    if character == "u":
+        # replace with a *
+        currentindex = list1.index(character)
+        list1.pop(currentindex)
+        list1.insert(currentindex, "*"
 """
 
