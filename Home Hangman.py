@@ -1,18 +1,28 @@
 import random
 import string
-wordList = ["pancakes"]
+wordList = ["Pancakes? No!"]
 word = random.choice(wordList)
-asciilegal = string.ascii_lowercase
+uppercase = list(string.ascii_uppercase)
+lowercase = list(string.ascii_lowercase)
+asciilegal = string.ascii_lowercase + string.ascii_uppercase
 legalltrs = list(asciilegal)
 word_listform = list(word)
-guesseslft = 6
+guesseslft = 8
 prior_guesses = []
-disp_list = ["_"] * len(word)
+disp_list = []
+swapwordlist = list(word.swapcase())
+totalword = swapwordlist + word_listform
+for i in range(len(word)):
+    if word_listform[i] in legalltrs:
+        disp_list.append("_")
+    else:
+        disp_list.append(word_listform[i])
+
 while guesseslft > 0 and "_" in disp_list:
     print(' '.join(disp_list))
     print("Tries left: %d" % guesseslft)
     guessltr = input("Guess a letter:")
-    if guessltr not in prior_guesses and guessltr in legalltrs:
+    if guessltr not in prior_guesses and guessltr in legalltrs and guessltr in totalword:
         for letter in range(len(word_listform)):
             if guessltr == word_listform[letter]:
                 print("Correct!")
@@ -20,9 +30,9 @@ while guesseslft > 0 and "_" in disp_list:
                 prior_guesses.append(guessltr)
     elif guessltr not in legalltrs:
         print("That is not a valid letter. Please try again.")
-    else:
+    elif guessltr in prior_guesses:
         print("You already guessed that.")
-    if guessltr not in word_listform and guessltr in legalltrs:
+    if guessltr not in word_listform and guessltr in legalltrs and guessltr not in list(word.swapcase()):
         guesseslft -= 1
         print("Incorrect.")
         prior_guesses.append(guessltr)
