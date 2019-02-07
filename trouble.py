@@ -1,4 +1,5 @@
-die = 0
+
+
 def turn():
     die = int(input("Enter roll amount:"))
     if die == 1:
@@ -43,10 +44,12 @@ def turn():
                 print("Take enemy piece")
         elif yesno == "Y":
             print("Move piece into the finish")
+
+
 turn()
 gameend = False
 gover = "N"
-while gameend == False:
+while gameend is False:
     gover = input("Is the game over? Type Y for yes and N for no.")
     if gover == "Y":
         print("Thanks for playing!")
