@@ -1,6 +1,6 @@
 import random
 import string
-wordList = ["pancakes"]
+wordList = ["wiebe", "tiger", "edison", "school", "folder", "bookshelf", "pencil", "campus", "notebook", "desk"]
 word = random.choice(wordList)
 asciilegal = string.ascii_lowercase
 legalltrs = list(asciilegal)
