@@ -1,6 +1,10 @@
 import random
 import string
+<<<<<<< HEAD
+wordList = ["wiebe", "tiger", "edison", "school", "folder", "bookshelf", "pencil", "campus", "notebook", "desk"]
+=======
 wordList = ["Pancakes? No!"]
+>>>>>>> b4b8bc684701b105960fb77bd00b6dc0cbe5a785
 word = random.choice(wordList)
 uppercase = list(string.ascii_uppercase)
 lowercase = list(string.ascii_lowercase)
