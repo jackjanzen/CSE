@@ -57,7 +57,10 @@ world_map = {
     },
     'EDGE_OF_PIT': {
         'NAME': "Edge of Pit",
-        'DESC': "x",
+        'DESC': "There is a camp here. "
+                "There is an unlocked chest in front of you, with a lantern sitting on top. Behind the chest, "
+                "you can here a faint voice singing from the pit's bottom. You should go "
+                "down there, but it would be hard without a safe way to descend.",
         'PATHS': {
             'NORTH': 'N_OF_PIT',
             'SOUTH': 'S_OF_PIT',
