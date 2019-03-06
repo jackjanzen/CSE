@@ -9,6 +9,7 @@ class Room(object):
         self.down = down
         self.up = up
         self.to_pit = to_pit
+        self.characters = []
 
     def print_desc(self):
         return self.desc
@@ -34,6 +35,13 @@ class Player(object):
         """
         name_of_room = getattr(self.current_location, direction)
         return globals()[name_of_room]
+
+
+class PeLady(object):
+    def __init__(self, desc=None, dialogue=None, ):
+        self.name = "Deidrie Henry"
+        self.desc = desc
+        self.dialogue = dialogue
 
 
 WOFPIT = Room("West of Pit", "You stand in a clearing with a pit in the center. Near the edge of the pit, "
@@ -92,9 +100,9 @@ player = Player(WOFPIT)
 # Controller
 playing = True
 directions = ['north', 'south', 'east', 'west', 'up', 'down']
-short_directions = ['n', 's', 'e', 'w', 'u', 'd']
-misc_comm = ["to pit"]
-short_mc = ["pit"]
+# short_directions = ['n', 's', 'e', 'w', 'u', 'd']
+# misc_comm = ["to pit"]
+# short_mc = ["pit"]
 while playing:
     print(player.current_location.name)
     print(player.current_location.desc)
@@ -107,11 +115,9 @@ while playing:
     #     command = misc_comm[index]
     if command.lower() in ['q', 'quit', 'exit']:
         playing = False
-    elif command.lower() = "to_pit" or command.lower() = "pit":
-
-    elif command.lower() in directions or command.lower() in misc_comm:
+    elif command.lower() in directions:  # or command.lower() in misc_comm:
         try:
-            next_room = player.find_next_room(command)
+            next_room = player.find_next_room(command.lower())
             player.move(next_room)
         except KeyError:
             print("I can't go that way.")
