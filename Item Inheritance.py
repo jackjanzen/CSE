@@ -15,13 +15,13 @@ class Broadsword(Weapon):
     def __init__(self, desc):
         super(Broadsword, self).__init__("Steel Broadsword", 34, 30, 75)
         self.desc = desc
-        
+
 
 class TIBroadsword(Weapon):
     def __init__(self, desc):
         super(TIBroadsword, self).__init__("Tiger Iron Broadsword", 34, 40, 75)
         self.desc = desc
-        
+
 
 class BWBroadsword(Weapon):
     def __init__(self, desc):
@@ -63,3 +63,88 @@ class BWGreatsword(Weapon):
     def __init__(self, desc):
         super(BWGreatsword, self).__init__("Bloodworked Greatsword", 75, 80, 65)
         self.desc = desc
+
+
+class Bow(Weapon):
+    def __init__(self, desc, arrows):
+        super(Bow, self).__init__("Wooden Longbow", 100, 100, 35)
+        self.desc = desc
+        self.arrows = arrows
+
+
+class TFBow(Weapon):
+    def __init__(self, desc, arrows):
+        super(TFBow, self).__init__("True-Fire Longbow", 100, 100, 55)
+        self.desc = desc
+        self.arrows = arrows
+
+
+class MCBow(Weapon):
+    def __init__(self, desc, arrows):
+        super(MCBow, self).__init__("Master-Crafted Longbow", 100, 110, 35)
+        self.desc = desc
+        self.arrows = arrows
+
+
+class Armor(Item):
+    def __init__(self, name, hp, part, crit):
+        super(Armor, self).__init__(name)
+        self.hp = hp
+        self.part = part
+        self.crit = crit
+
+
+class Chestplate(Armor):
+    def __init__(self, desc):
+        super(Chestplate, self).__init__("Steel Chestplate", 75, "CP", True)
+        self.desc = desc
+
+
+class TIChestplate(Armor):
+    def __init__(self, desc):
+        super(TIChestplate, self).__init__("Tiger Iron Chestplate", 100, "CP", True)
+        self.desc = desc
+
+
+class Leggings(Armor):
+    def __init__(self, desc):
+        super(Leggings, self).__init__("Steel Leggings", 75, "LG", True)
+        self.desc = desc
+
+
+class TILeggings(Armor):
+    def __init__(self, desc):
+        super(TILeggings, self).__init__("Tiger Iron Leggings", 100, "LG", True)
+        self.desc = desc
+
+
+class Boots(Armor):
+    def __init__(self, desc):
+        super(Boots, self).__init__("Steel Boots", 25, "BT", True)
+        self.desc = desc
+
+
+class TIBoots(Armor):
+    def __init__(self, desc):
+        super(TIBoots, self).__init__("Tiger Iron Boots", 25, "BT", True)
+        self.desc = desc
+
+
+class Helmet(Armor):
+    def __init__(self, desc):
+        super(Helmet, self).__init__("Steel Helmet", 25, "HM", False)
+        self.desc = desc
+
+
+class TIHelmet(Armor):
+    def __init__(self, desc):
+        super(TIHelmet, self).__init__("Tiger Iron Helmet", 25, "HM", False)
+        self.desc = desc
+
+
+class Consumables(Item):
+    def __init__(self, name, type, uses):
+        super(Consumables, self).__init__(name)
+        self.type = type
+        self.uses = uses
+
