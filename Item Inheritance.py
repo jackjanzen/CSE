@@ -96,55 +96,81 @@ class Armor(Item):
 
 class Chestplate(Armor):
     def __init__(self, desc):
-        super(Chestplate, self).__init__("Steel Chestplate", 75, "CP", True)
+        super(Chestplate, self).__init__("Steel Chestplate", 75, 2, True)
         self.desc = desc
 
 
 class TIChestplate(Armor):
     def __init__(self, desc):
-        super(TIChestplate, self).__init__("Tiger Iron Chestplate", 100, "CP", True)
+        super(TIChestplate, self).__init__("Tiger Iron Chestplate", 100, 2, True)
         self.desc = desc
 
 
 class Leggings(Armor):
     def __init__(self, desc):
-        super(Leggings, self).__init__("Steel Leggings", 75, "LG", True)
+        super(Leggings, self).__init__("Steel Leggings", 75, 3, True)
         self.desc = desc
 
 
 class TILeggings(Armor):
     def __init__(self, desc):
-        super(TILeggings, self).__init__("Tiger Iron Leggings", 100, "LG", True)
+        super(TILeggings, self).__init__("Tiger Iron Leggings", 100, 3, True)
         self.desc = desc
 
 
 class Boots(Armor):
     def __init__(self, desc):
-        super(Boots, self).__init__("Steel Boots", 25, "BT", True)
+        super(Boots, self).__init__("Steel Boots", 25, 4, True)
         self.desc = desc
 
 
 class TIBoots(Armor):
     def __init__(self, desc):
-        super(TIBoots, self).__init__("Tiger Iron Boots", 25, "BT", True)
+        super(TIBoots, self).__init__("Tiger Iron Boots", 25, 4, True)
         self.desc = desc
 
 
 class Helmet(Armor):
     def __init__(self, desc):
-        super(Helmet, self).__init__("Steel Helmet", 25, "HM", False)
+        super(Helmet, self).__init__("Steel Helmet", 25, 1, False)
         self.desc = desc
 
 
 class TIHelmet(Armor):
     def __init__(self, desc):
-        super(TIHelmet, self).__init__("Tiger Iron Helmet", 25, "HM", False)
+        super(TIHelmet, self).__init__("Tiger Iron Helmet", 25, 1, False)
         self.desc = desc
 
 
-class Consumables(Item):
-    def __init__(self, name, type, uses):
-        super(Consumables, self).__init__(name)
-        self.type = type
+class Consumable(Item):
+    def __init__(self, name, uses):
+        super(Consumable, self).__init__(name)
         self.uses = uses
 
+
+class Potion(Consumable):
+    def __init__(self, name, effect):
+        super(Potion, self).__init__(name, 1)
+        self.effect = effect
+
+
+class HPotion(Potion):
+    def __init__(self, desc):
+        super(HPotion, self).__init__("Lesser Health Potion", 1)
+        self.desc = desc
+
+
+class H2Potion(Potion):
+    def __init__(self, desc):
+        super(H2Potion, self).__init__("Greater Health Potion", 2)
+        self.desc = desc
+
+
+class Invis(Potion):
+    def __init__(self, desc):
+        super(Invis, self).__init__("Invisibility Potion", 3)
+        self.desc = desc
+
+
+class Key(Consumable):
+    
