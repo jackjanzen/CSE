@@ -142,9 +142,14 @@ class TIHelmet(Armor):
         self.desc = desc
 
 
-class Consumables(Item):
-    def __init__(self, name, type, uses):
-        super(Consumables, self).__init__(name)
-        self.type = type
+class Consumable(Item):
+    def __init__(self, name, uses):
+        super(Consumable, self).__init__(name)
         self.uses = uses
 
+
+class HPotion(Consumable):
+    def __init__(self, restvalue, desc):
+        super(HPotion, self).__init__("Lesser Health Potion", 1)
+        self.restvalue = restvalue
+        self.desc = desc
