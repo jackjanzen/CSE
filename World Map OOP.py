@@ -44,7 +44,8 @@ class PeLady(object):
         self.dialogue = dialogue
 
 
-WOFPIT = Room("West of Pit", "You stand in a clearing with a pit in the center. Near the edge of the pit, "
+WOFPIT = Room("West of Pit", "Welcome to 14 Beers at Chili's: A Choose Your Own Adventure game!"
+                             "You stand in a clearing with a pit in the center. Near the edge of the pit, "
                              "a camp sits. It seems it has been abandoned for a long"
                              " time. \nTo the far south, you can see"
                              " the dark spires of a castle. "
@@ -66,21 +67,22 @@ EDGEOFPIT = Room("Edge of Pit", "There is a chest here with a lantern "
                                 "\nprobably won't be able to"
                                 " get back up.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", 'BOTOFPIT', 'UPOFPIT', None)
 UPOFPIT = Room("Up of Pit", "What?", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
-UP2OFPIT = Room("Up of Pit", "No, really, what's the goal here?", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
-UP3OFPIT = Room("Up of Pit", "Dude, stop. Seriously.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
-UP4OFPIT = Room("Up of Pit", "Can you please just do the quest? You know, I may be an omnipotent narrator, "
-                             "but I have to move "
-                             "to follow you.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
-UP5OFPIT = Room("Up of Pit", "What could you possibly want to go all the way up here? If you keep going, "
-                             "I'll have no choice "
-                             "but to call god.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
-UP6OFPIT = Room("Up of Pit", "Listen. This is Jack speaking. Yeah, THE Jack Elliot Janzen. The guy who made you and"
-                             " put you here."
-                             " The guy that made the world around you. If you keep going, "
-                             "I'm gonna have to send you back to West"
-                             " of Pit. Neither of us want that, do we? So, I'll cut"
-                             " you a deal. You go back NOW, or I'll send you "
-                             "back by force.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+UP2OFPIT = Room("Up Up of Pit", "No, really, what's the goal here?", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+UP3OFPIT = Room("Up Up Up of Pit", "Dude, stop. Seriously.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+UP4OFPIT = Room("Up Up Up Up of Pit", "Can you please just do the quest? You know, I may be an omnipotent narrator, "
+                                      "but I have to move "
+                                      "to follow you.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+UP5OFPIT = Room("5(Up) of Pit", "What could you possibly want to go all the way up here? If you keep going, "
+                                "I'll have no choice "
+                                "but to call god.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+UP6OFPIT = Room("I'm getting tired of writing all these Ups.",
+                "Listen. This is Jack speaking. Yeah, THE Jack Elliot Janzen. The guy who made you and"
+                " put you here."
+                " The guy that made the world around you. If you keep going, "
+                "I'm gonna have to send you back to West"
+                " of Pit. Neither of us want that, do we? So, I'll cut"
+                " you a deal. You go back NOW, or I'll send you "
+                "back by force.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
 BOTOFPIT = Room("Bottom of Pit", "You land on the wet stone floor at the bottom of the pit. "
                                  "It was stupid to jump that far down and everything hurts."
                                  " If we're being realistic you'd be dead right now."
@@ -93,9 +95,15 @@ BOTOFPIT = Room("Bottom of Pit", "You land on the wet stone floor at the bottom 
 PEPIT = Room("Popeye's", "The fluorescent lights on the ceiling make the restaurant impressively bright."
                          "\nThe smell of fried chicken fills the air. A nice lady is standing behind the counter."
                          " Perhaps you should ask her "
-                         "about the nature of this place.", None, None, 'BOTOFPIT', None, None, None, None)
-EQROOMPIT = Room("Equipment Room", "x", 'NCEHALL', None, None, 'BOTOFPIT', None, None, None)
-SCNHALL = Room("South Chamber | North Hall", "x", 'BOTOFPIT', None, 'NCEHALL', 'NCWHALL', None, None, None)
+                         "about the nature of this whimsical place.", None, None, 'BOTOFPIT', None, None, None, None)
+EQROOMPIT = Room("Equipment Room", "There are various racks and armor stands arranged about the room."
+                                   "Three swords are hung on one of the racks: a greatsword, a broadsword, and "
+                                   "a longsword. Yes, I use the Oxford "
+                                   "Comma.\n There is an armor stand. It has armor on it. "
+                                   "You want it? go get it.\nThere is a locked gate on the "
+                                   "northern wall.", 'NCEHALL', None, None, 'BOTOFPIT', None, None, None)
+SCNHALL = Room("South Chamber | North Hall", "Some guy that puts milk in before cereal blocks your path."
+                                             "T", 'BOTOFPIT', None, 'NCEHALL', 'NCWHALL', None, None, None)
 SCWHALL = Room("South Chamber | West Hall", "x", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
 SCEHALL = Room("South Chamber | East Hall", "x", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
 SCSHALL = Room("South Chamber | South Hall", "x", 'SCCENT', None, 'SCEHALL', 'SCWHALL', None, None, None)

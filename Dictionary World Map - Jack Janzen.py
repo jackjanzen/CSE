@@ -221,8 +221,15 @@ world_map = {
     },
     'BOT_OF_PIT': {
         'NAME': 'Bottom Of Pit',
-        'DESC': "The old willow tree in the center of the pit broke your fall, and you find yourself "
-                "face-down on the hard rock floor.",
+        'DESC': "You land on the wet stone floor at the bottom of the pit. "
+                "It was stupid to jump that far down and everything hurts."
+                " If we're being realistic you'd be dead right now."
+                " \nBut, for the plot's sake, you lived. "
+                "\nTo the west there is a bustling restaraunt with a sign over the door"
+                " that reads, 'Popeye's'. To the south there is a dark room with strange noises"
+                " coming from it. It would be wise to have a light with you before entering."
+                " \nTo the east, there is a room with various pieces of "
+                "battle-ready equipment.",
         'PATHS': {
             'WEST': 'POPEYES1',
             'EAST': 'EQ_ROOM_PIT',
@@ -231,7 +238,10 @@ world_map = {
     },
     'POPEYES1': {
         'NAME': 'Popeyes',
-        'DESC': "x",
+        'DESC': "The fluorescent lights on the ceiling make the restaurant impressively bright."
+                "\nThe smell of fried chicken fills the air. A nice lady is standing behind the counter."
+                " Perhaps you should ask her "
+                "about the nature of this whimsical place.",
         'PATHS': {
             'EAST': 'BOT_OF_PIT'
         }

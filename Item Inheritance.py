@@ -148,13 +148,6 @@ class Consumable(Item):
         self.uses = uses
 
 
-<<<<<<< HEAD
-class HPotion(Consumable):
-    def __init__(self, restvalue, desc):
-        super(HPotion, self).__init__("Lesser Health Potion", 1)
-        self.restvalue = restvalue
-        self.desc = desc
-=======
 class Potion(Consumable):
     def __init__(self, name, effect):
         super(Potion, self).__init__(name, 1)
@@ -180,5 +173,4 @@ class Invis(Potion):
 
 
 class Key(Consumable):
-    
->>>>>>> fc1b51814e8847f15e800d0ced30e83018fc6652
+
