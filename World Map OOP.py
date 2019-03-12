@@ -44,7 +44,7 @@ class PeLady(object):
         self.dialogue = dialogue
 
 
-WOFPIT = Room("West of Pit", "Welcome to 14 Root Beers at Chili's: A Choose Your Own Adventure game!"
+WOFPIT = Room("West of Pit", "Welcome to 14 Qyzpn at Chili's: A Choose Your Own Adventure game! "
                              "You stand in a clearing with a pit in the center. Near the edge of the pit, "
                              "a camp sits. It seems it has been abandoned for a long"
                              " time. \nTo the far south, you can see"
@@ -90,7 +90,7 @@ BOTOFPIT = Room("Bottom of Pit", "You land on the wet stone floor at the bottom 
                                  " If we're being realistic you'd be dead right now."
                                  " \nBut, for the plot's sake, you lived. "
                                  "\nTo the west there is a bustling restaraunt with a sign over the door"
-                                 " that reads, 'Popeye's'. To the south there is a dark room with strange noises"
+                                 " that reads, 'Popeye's'. \nTo the south there is a dark room with strange noises"
                                  " coming from it. It would be wise to have a light with you before entering."
                                  " \nTo the east, there is a room with various pieces of "
                                  "battle-ready equipment.", None, "SCNHALL", 'EQROOMPIT', 'PEPIT', None, None, None)
@@ -99,28 +99,39 @@ PEPIT = Room("Popeye's", "The fluorescent lights on the ceiling make the restaur
                          " Perhaps you should ask her "
                          "about the nature of this whimsical place.", None, None, 'BOTOFPIT', None, None, None, None)
 EQROOMPIT = Room("Equipment Room", "There are various racks and armor stands arranged about the room."
-                                   "Three swords are hung on one of the racks: a greatsword, a broadsword, and "
-                                   "a longsword. Yes, I use the Oxford "
-                                   "Comma.\n There is an armor stand. It has armor on it. "
-                                   "You want it? go get it.\nThere is a locked gate on the "
+                                   " Three swords are hung on one of the racks: a greatsword, a broadsword, and "
+                                   "a longsword. \nYes, I use the Oxford "
+                                   "Comma.\nThere is an armor stand. It has armor on it. "
+                                   "\nThere is a locked gate on the "
                                    "northern wall.", 'NCEHALL', None, None, 'BOTOFPIT', None, None, None)
 SCNHALL = Room("South Chamber | North Hall", "Some guy that puts milk in before cereal blocks your path."
-                                             "No one knows why he does this, he just"
-                                             "does and will argue with anyone that disagrees.\n"
+                                             " No one knows why he does this, he just"
+                                             " does, and will argue with anyone that disagrees.\n"
                                              "To the East and West, there are two hallways. They curve to the south,"
-                                             "but you can't see any "
+                                             " but you can't see any "
                                              "light coming from "
                                              "there.", 'BOTOFPIT', None, 'NCEHALL', 'NCWHALL', None, None, None)
 SCWHALL = Room("South Chamber | West Hall", "Two Flat Earthers block your path. As soon as you walk into the room,"
                                             " they tell you about themselves. It's a married vegan couple named"
-                                            " Marge and Ethan, and they have two children. Who are, of course,"
+                                            " Marge and Ethan, \nwho have two children. \nWho are, of course,"
                                             " unvaccinated.\nAfter getting into a heated debate with them"
                                             " on the SHAPE OF THE EARTH, they begin to instigate a battle."
-                                            "\n To the North and the South, there are hallways."
+                                            "\nTo the North and the South, there are hallways."
                                             "", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
-SCEHALL = Room("South Chamber | East Hall", "x", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
-SCSHALL = Room("South Chamber | South Hall", "x", 'SCCENT', None, 'SCEHALL', 'SCWHALL', None, None, None)
-SCCENT = Room("South Chamber | Center", "x", None, 'SCSHALL', None, None, None, None, None)
+SCEHALL = Room("South Chamber | East Hall", "Two Flat Earthers block your path. As soon as you walk into the room,"
+                                            " they tell you about themselves. \nIt's a married couple named"
+                                            " John and Katherine, who have three children. Who are, of course,"
+                                            " unvaccinated. \nKatherine says that crystal therapy"
+                                            " is the only safe alternative to vaccines."
+                                            "\nWhat an idiot.\nAfter getting into a heated debate with them"
+                                            " on the SHAPE OF THE EARTH, they begin to instigate a battle."
+                                            "\nTo the North and the South, there are "
+                                            "hallways.", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
+SCSHALL = Room("South Chamber | South Hall", "A Climate Change"
+                                             "denier and a Flat Earther block your path. Need I say more?"
+                                             "\nTo the East, West, and North there are hallways."
+                                             "", 'SCCENT', None, 'SCEHALL', 'SCWHALL', None, None, None)
+SCCENT = Room("South Chamber | Center", "Ben Shapiro", None, 'SCSHALL', None, None, None, None, None)
 NCEHALL = Room("North Chamber | East Hall", "x", 'NCNHALL', 'NCSHALL', 'EQROOMPIT', None, None, None, None)
 NCNHALL = Room("North Chamber | North Hall", "x", None, None, 'NCEHALL', 'NCWHALL', None, None, None)
 NCSHALL = Room("North Chamber | South Hall", "x", None, None, 'NCEHALL', 'NCWHALL', None, None, None)
@@ -141,8 +152,9 @@ WCEHALL = Room("West Chamber | East Hall", "x", 'WCNHALL', "WCSHALL", None, None
 WCSHALL = Room("West Chamber | South Hall", "x", 'WCCENT', None, 'WCEHALL', 'WCWHALL', None, None, None)
 WCCENT = Room("West Chamber | Center", "x", None, 'WCSHALL', None, None, None, None, None)
 
-current_location = WOFPIT
-
+current_location = SCSHALL
+print(current_location.name)
+print(current_location.desc)
 player = Player(WOFPIT)
 '''
 # Controller
