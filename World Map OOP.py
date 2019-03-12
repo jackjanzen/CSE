@@ -44,7 +44,7 @@ class PeLady(object):
         self.dialogue = dialogue
 
 
-WOFPIT = Room("West of Pit", "Welcome to 14 Beers at Chili's: A Choose Your Own Adventure game!"
+WOFPIT = Room("West of Pit", "Welcome to 14 Root Beers at Chili's: A Choose Your Own Adventure game!"
                              "You stand in a clearing with a pit in the center. Near the edge of the pit, "
                              "a camp sits. It seems it has been abandoned for a long"
                              " time. \nTo the far south, you can see"
@@ -67,8 +67,10 @@ EDGEOFPIT = Room("Edge of Pit", "There is a chest here with a lantern "
                                 "\nprobably won't be able to"
                                 " get back up.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", 'BOTOFPIT', 'UPOFPIT', None)
 UPOFPIT = Room("Up of Pit", "What?", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
-UP2OFPIT = Room("Up Up of Pit", "No, really, what's the goal here?", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
-UP3OFPIT = Room("Up Up Up of Pit", "Dude, stop. Seriously.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+UP2OFPIT = Room("Up Up of Pit", "No, really, what's "
+                                "the goal here?", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+UP3OFPIT = Room("Up Up Up of Pit", "Dude, "
+                                   "stop. Seriously.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
 UP4OFPIT = Room("Up Up Up Up of Pit", "Can you please just do the quest? You know, I may be an omnipotent narrator, "
                                       "but I have to move "
                                       "to follow you.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
@@ -78,7 +80,7 @@ UP5OFPIT = Room("5(Up) of Pit", "What could you possibly want to go all the way 
 UP6OFPIT = Room("I'm getting tired of writing all these Ups.",
                 "Listen. This is Jack speaking. Yeah, THE Jack Elliot Janzen. The guy who made you and"
                 " put you here."
-                " The guy that made the world around you. If you keep going, "
+                " The guy that made the world around you.\nIf you keep going, "
                 "I'm gonna have to send you back to West"
                 " of Pit. Neither of us want that, do we? So, I'll cut"
                 " you a deal. You go back NOW, or I'll send you "
@@ -103,8 +105,19 @@ EQROOMPIT = Room("Equipment Room", "There are various racks and armor stands arr
                                    "You want it? go get it.\nThere is a locked gate on the "
                                    "northern wall.", 'NCEHALL', None, None, 'BOTOFPIT', None, None, None)
 SCNHALL = Room("South Chamber | North Hall", "Some guy that puts milk in before cereal blocks your path."
-                                             "T", 'BOTOFPIT', None, 'NCEHALL', 'NCWHALL', None, None, None)
-SCWHALL = Room("South Chamber | West Hall", "x", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
+                                             "No one knows why he does this, he just"
+                                             "does and will argue with anyone that disagrees.\n"
+                                             "To the East and West, there are two hallways. They curve to the south,"
+                                             "but you can't see any "
+                                             "light coming from "
+                                             "there.", 'BOTOFPIT', None, 'NCEHALL', 'NCWHALL', None, None, None)
+SCWHALL = Room("South Chamber | West Hall", "Two Flat Earthers block your path. As soon as you walk into the room,"
+                                            " they tell you about themselves. It's a married vegan couple named"
+                                            " Marge and Ethan, and they have two children. Who are, of course,"
+                                            " unvaccinated.\nAfter getting into a heated debate with them"
+                                            " on the SHAPE OF THE EARTH, they begin to instigate a battle."
+                                            "\n To the North and the South, there are hallways."
+                                            "", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
 SCEHALL = Room("South Chamber | East Hall", "x", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
 SCSHALL = Room("South Chamber | South Hall", "x", 'SCCENT', None, 'SCEHALL', 'SCWHALL', None, None, None)
 SCCENT = Room("South Chamber | Center", "x", None, 'SCSHALL', None, None, None, None, None)
@@ -128,10 +141,7 @@ WCEHALL = Room("West Chamber | East Hall", "x", 'WCNHALL', "WCSHALL", None, None
 WCSHALL = Room("West Chamber | South Hall", "x", 'WCCENT', None, 'WCEHALL', 'WCWHALL', None, None, None)
 WCCENT = Room("West Chamber | Center", "x", None, 'WCSHALL', None, None, None, None, None)
 
-# DESC TESTER - DELETE WHEN DESCRIPTIONS ARE DONE, USED FOR CHECKING DESCRIPTION FIT
-current_location = BOTOFPIT
-print(current_location.name)
-print(current_location.desc)
+current_location = WOFPIT
 
 player = Player(WOFPIT)
 '''
