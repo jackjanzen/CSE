@@ -2,11 +2,14 @@
 world_map = {
     'W_OF_PIT': {
         'NAME': "West of Pit",
-        'DESC': "You wake up in a clearing in the middle of a vast forest. "
-                "There is a piece of paper with what seems to be instructions on it on the ground beside you. "
-                "In the center, there is a large pit with something glowing at the bottom of it,"
-                " casting a spotlight into the moonlit sky. It's probably wise to do some exploring after reading the"
-                " page.",
+        'DESC': "Welcome to 14 Qyzpn at Chili's: A Choose Your Own Adventure game! "
+                "You stand in a clearing with a pit in the center. Near the edge of the pit, "
+                "a camp sits. It seems it has been abandoned for a long"
+                " time. \nTo the far south, you can see"
+                " the dark spires of a castle. "
+                "\nOn the ground beside you there is a letter. You should probably "
+                "read it "
+                "before going further.",
         'PATHS': {
             'NORTH': "N_OF_PIT",
             'TO PIT': "EDGE_OF_PIT",
@@ -17,7 +20,10 @@ world_map = {
     },
     'N_OF_PIT': {
         'NAME': "North of Pit",
-        'DESC': "Having moved further north, you can see columns of smoke and black spires reaching over the treetops.",
+        'DESC': "You can see more of the castle now. A large insignia is visible with the letters "
+                '"HW". \nColumns of smoke rise from the area behind the castle. They are extra'
+                " visible against the "
+                "orange sunset sky.",
         'PATHS': {
             'SOUTH': 'S_OF_PIT',
             'TO PIT': 'EDGE_OF_PIT',
@@ -28,9 +34,9 @@ world_map = {
     },
     'S_OF_PIT': {
         'NAME': "South of Pit",
-        'DESC': "A strong smell of steel and oil combined with a feeling that a poor artist lies somewhere beyond the"
-                " trees futher to the south leaves a crater in your stomach. It's probably not best to go back there"
-                " before you have completed the page's task.",
+        'DESC': "The smell of steel and oil combined with the feeling that an awful"
+                " artist is near dissuades you from going "
+                "further south.",
         'PATHS': {
             'NORTH': 'N_OF_PIT',
             'TO PIT': 'EDGE_OF_PIT',
@@ -41,9 +47,8 @@ world_map = {
     },
     'E_OF_PIT': {
         'NAME': "East of Pit",
-        'DESC': "There looks to be an abandoned camp near the edge of the pit; it might be wise to go check it for "
-                "supplies. You can see the orange sun slowly begin to hide itself behind the treetops, which are "
-                "dressed in silhouette.",
+        'DESC': "You can see the camp more clearly now. A lantern sits on top of a chest, the contents"
+                " of which are unknown.",
         'PATHS': {
             'NORTH': 'N_OF_PIT',
             'TO PIT': 'EDGE_OF_PIT',
@@ -117,8 +122,8 @@ world_map = {
     'UP6_OF_PIT': {
         'NAME': "I'm really getting tired of writing all these ups.",
         'DESC': "Listen. This is Jack speaking. Yeah, THE Jack Elliot Janzen. The guy who made you and put you here."
-                " The guy that made the world around you. If you keep going, I'm gonna have to send you back to West"
-                " of Pit. Neither of us want that, do we? So, I'll cut you a deal. You go back NOW, or I'll send you "
+                " \nThe guy that made the world around you. If you keep going, I'm gonna have to send you back to West"
+                " of Pit. Neither of us want that, do we? \nSo, I'll cut you a deal. You go back NOW, or I'll send you "
                 "back by force.",
         'PATHS': {
             'NORTH': 'N_OF_PIT',
@@ -133,7 +138,7 @@ world_map = {
         'NAME': "West of Pit",
         'DESC': "Told you so. You wake up in a clearing in the middle of a vast forest. "
                 "There is a piece of paper with what seems to be instructions on it on the ground beside you. "
-                "In the center, there is a large pit with something glowing at the bottom of it,"
+                "\nIn the center, there is a large pit with something glowing at the bottom of it,"
                 " casting a spotlight into the orange sky. It's probably wise to do some exploring after reading the"
                 " page.",
         'PATHS': {

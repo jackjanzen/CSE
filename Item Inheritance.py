@@ -171,6 +171,40 @@ class Invis(Potion):
         super(Invis, self).__init__("Invisibility Potion", 3)
         self.desc = desc
 
-
+'''
 class Key(Consumable):
+    def __init__(self, name):
+
+
+'''
+class Character(object):
+    def __init__(self, name, health, weapon, armor):
+        self.name = name
+        self.health = health
+        self.weapon = weapon
+        self.armor = armor
+
+    def take_damage(self, damage:int):
+        if self.armor.hp > damage:
+            print("No damage is done!")
+        else:
+            self.health -= damage - self.armor.hp
+        print("%s has %d health left." % (self.name, self.health))
+
+    def attack(self, target):
+        print("%s attacks %s for %d damage" % (self.name, target.name, self.weapon.damage))
+        target.take_damage(self.weapon.damage)
+
+
+sword = Weapon("Sword", 10, 1000, 1)
+canoe = Weapon("Canoe", 42, 1000, 1)
+wiebe_armor = Armor("Armor of the gods", 5792, 1, 1)
+
+flat_earther1 = Character("Katherine", 1000, sword, Armor("Generic Armor", 2, 1, 1))
+flat_earther2 = Character("John", 10000, canoe, wiebe_armor)
+flat_earther3 = Character("Marge", 10000, canoe, wiebe_armor)
+flat_earther4 = Character("Ethan", 10000, canoe, wiebe_armor)
+
+
+
 

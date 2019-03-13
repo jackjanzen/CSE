@@ -131,7 +131,11 @@ SCSHALL = Room("South Chamber | South Hall", "A Climate Change"
                                              "denier and a Flat Earther block your path. Need I say more?"
                                              "\nTo the East, West, and North there are hallways."
                                              "", 'SCCENT', None, 'SCEHALL', 'SCWHALL', None, None, None)
-SCCENT = Room("South Chamber | Center", "Ben Shapiro", None, 'SCSHALL', None, None, None, None, None)
+SCCENT = Room("South Chamber | Center", "Ben Shapiro himself blocks your path."
+                                        "\n Rumor has it he ate 50,000 liberals in one sitting.\nWith his sharp wit,"
+                                        "he dumbfounds you with pure FACTS and LOGIC, and begins to instigate a battle"
+                                        ".\nTo the South there is a hallway."
+                                        "", None, 'SCSHALL', None, None, None, None, None)
 NCEHALL = Room("North Chamber | East Hall", "x", 'NCNHALL', 'NCSHALL', 'EQROOMPIT', None, None, None, None)
 NCNHALL = Room("North Chamber | North Hall", "x", None, None, 'NCEHALL', 'NCWHALL', None, None, None)
 NCSHALL = Room("North Chamber | South Hall", "x", None, None, 'NCEHALL', 'NCWHALL', None, None, None)
