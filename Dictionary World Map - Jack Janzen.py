@@ -136,11 +136,14 @@ world_map = {
     },
     'W1_OF_PIT': {
         'NAME': "West of Pit",
-        'DESC': "Told you so. You wake up in a clearing in the middle of a vast forest. "
-                "There is a piece of paper with what seems to be instructions on it on the ground beside you. "
-                "\nIn the center, there is a large pit with something glowing at the bottom of it,"
-                " casting a spotlight into the orange sky. It's probably wise to do some exploring after reading the"
-                " page.",
+        'DESC': "Told you so. Welcome to 14 Qyzpn at Chili's: A Choose Your Own Adventure game! "
+                "You stand in a clearing with a pit in the center. Near the edge of the pit, "
+                "a camp sits. It seems it has been abandoned for a long"
+                " time. \nTo the far south, you can see"
+                " the dark spires of a castle. "
+                "\nOn the ground beside you there is a letter. You should probably "
+                "read it "
+                "before going further.",
         'PATHS': {
             'NORTH': "N1_OF_PIT",
             'TO PIT': "EDGE1_OF_PIT",
@@ -151,7 +154,10 @@ world_map = {
     },
     'N1_OF_PIT': {
         'NAME': "North of Pit",
-        'DESC': "Having moved further north, you can see columns of smoke and black spires reaching over the treetops.",
+        'DESC': "You can see more of the castle now. A large insignia is visible with the letters "
+                '"HW". \nColumns of smoke rise from the area behind the castle. They are extra'
+                " visible against the "
+                "orange sunset sky.",
         'PATHS': {
             'SOUTH': 'S1_OF_PIT',
             'TO PIT': 'EDGE1_OF_PIT',
@@ -162,9 +168,9 @@ world_map = {
     },
     'S1_OF_PIT': {
         'NAME': "South of Pit",
-        'DESC': "A strong smell of steel and oil combined with a feeling that a poor artist lies somewhere beyond the"
-                " trees futher to the south leaves a crater in your stomach. It's probably not best to go back there"
-                " before you have completed the page's task.",
+        'DESC': "The smell of steel and oil combined with the feeling that an awful"
+                " artist is near dissuades you from going "
+                "further south.",
         'PATHS': {
             'NORTH': 'N1_OF_PIT',
             'TO PIT': 'EDGE1_OF_PIT',
@@ -175,9 +181,8 @@ world_map = {
     },
     'E1_OF_PIT': {
         'NAME': "East of Pit",
-        'DESC': "There looks to be an abandoned camp near the edge of the pit; it might be wise to go check it for "
-                "supplies. You can see the orange sun slowly begin to hide itself behind the treetops, which are "
-                "dressed in silhouette.",
+        'DESC': "You can see the camp more clearly now. A lantern sits on top of a chest, the contents"
+                " of which are unknown",
         'PATHS': {
             'NORTH': 'N1_OF_PIT',
             'TO PIT': 'EDGE1_OF_PIT',
@@ -213,8 +218,11 @@ world_map = {
     },
     'EDGE_OF_PIT': {
         'NAME': "Edge of Pit",
-        'DESC': "There is an abandoned camp here. There is an unlocked chest in front of you, and a sword lying "
-                "to the left of the chest.",
+        'DESC': "There is a chest here with a lantern "
+                "sitting on top. It appears to \nbe unlocked. "
+                "The pit before you is deep. If you jump down, you"
+                "\nprobably won't be able to"
+                " get back up.",
         'PATHS': {
             'NORTH': 'N_OF_PIT',
             'SOUTH': 'S_OF_PIT',
@@ -253,7 +261,12 @@ world_map = {
     },
     'EQ_ROOM_PIT': {
         'NAME': 'Equipment Room',
-        'DESC': 'x',
+        'DESC': "There are various racks and armor stands arranged about the room."
+                " Three swords are hung on one of the racks: a greatsword, a broadsword, and "
+                "a longsword. \nYes, I use the Oxford "
+                "Comma.\nThere is an armor stand. It has armor on it. "
+                "\nThere is a locked gate on the "
+                "northern wall.",
         'PATHS': {
             'WEST': 'BOT_OF_PIT'
         }
@@ -261,7 +274,13 @@ world_map = {
     'SCHAM_N': {
         'NAME': 'South Chamber'
                 'North Hall',
-        'DESC': 'x',
+        'DESC': "Some guy that puts milk in before cereal blocks your path."
+                " No one knows why he does this, he just"
+                " does, and will argue with anyone that disagrees.\n"
+                "To the East and West, there are two hallways. They curve to the south,"
+                " but you can't see any "
+                "light coming from "
+                'there.',
         'PATHS': {
             'WEST': 'SCHAM_W',
             'EAST': 'SCHAM_E',
@@ -271,7 +290,12 @@ world_map = {
     'SCHAM_W': {
         'NAME': 'South Chamber'
                 'West Hall',
-        'DESC': 'x',
+        'DESC': "Two Flat Earthers block your path. As soon as you walk into the room,"
+                " they tell you about themselves. It's a married vegan couple named"
+                " Marge and Ethan, \nwho have two children. \nWho are, of course,"
+                " unvaccinated.\nAfter getting into a heated debate with them"
+                " on the SHAPE OF THE EARTH, they begin to instigate a battle."
+                "\nTo the North and the South, there are hallways.",
         'PATHS': {
             'NORTH': 'SCHAM_N',
             'SOUTH': 'SCHAM_S'
@@ -280,7 +304,9 @@ world_map = {
     'SCHAM_S': {
         'NAME': 'South Chamber'
                 'South Hall',
-        'DESC': 'x',
+        'DESC': "A Climate Change"
+                "denier and a Flat Earther block your path. Need I say more?"
+                "\nTo the East, West, and North there are hallways.",
         'PATHS': {
             'NORTH': 'SCHAM_C',
             'EAST': 'SCHAM_E',
@@ -291,7 +317,15 @@ world_map = {
     'SCHAM_E': {
         'NAME': 'South Chamber'
                 'East Hall',
-        'DESC': 'x',
+        'DESC': "Two Flat Earthers block your path. As soon as you walk into the room,"
+                " they tell you about themselves. \nIt's a married couple named"
+                " John and Katherine, who have three children. Who are, of course,"
+                " unvaccinated. \nKatherine says that crystal therapy"
+                " is the only safe alternative to vaccines."
+                "\nWhat an idiot.\nAfter getting into a heated debate with them"
+                " on the SHAPE OF THE EARTH, they begin to instigate a battle."
+                "\nTo the North and the South, there are "
+                "hallways.",
         'PATHS': {
             'NORTH': 'SCHAM_N',
             'SOUTH': 'SCHAM_S'
@@ -300,15 +334,16 @@ world_map = {
     'SCHAM_C': {
         'NAME': 'South Chamber'
                 'Center',
-        'DESC': 'x',
+        'DESC': "Ben Shapiro himself blocks your path."
+                "\n Rumor has it he ate 50,000 liberals in one sitting.\nWith his sharp wit,"
+                "he dumbfounds you with pure FACTS and LOGIC, and begins to instigate a battle"
+                ".\nTo the South there is a hallway.",
         'PATHS': {
             'SOUTH': 'SCHAM_S'
         }
     }
 }
 
-overworld = ["N_OF_PIT", "S_OF_PIT", "E_OF_PIT", "W_OF_PIT", "UP_OF_PIT", "EDGE_OF_PIT"]
-in_pit_1 = ['BOT_OF_PIT', 'POPEYES1']
 
 # Controller
 playing = True

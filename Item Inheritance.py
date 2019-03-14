@@ -1,3 +1,6 @@
+import random
+
+
 class Item(object):
     def __init__(self, name):
         self.name = name
@@ -171,12 +174,31 @@ class Invis(Potion):
         super(Invis, self).__init__("Invisibility Potion", 3)
         self.desc = desc
 
-'''
+
 class Key(Consumable):
-    def __init__(self, name):
+    def __init__(self, name, door):
+        super(Key, self).__init__(name, 1)
+        self.door = door
 
 
-'''
+class EQKey(Key):
+    def __init__(self, desc):
+        super(EQKey, self).__init__("Equipment Room Key", EQDoor)
+        self.desc = desc
+
+
+class NCHAMKey(Key):
+    def __init__(self, desc):
+        super(NCHAMKey, self).__init__("North Chamber Key", NCHAMDoor)
+        self.desc = desc
+
+
+class Door(Item):
+    def __init__(self, name, lockstatus):
+        super(Door, self).__init__(name)
+        self.lockstatus = lockstatus
+
+
 class Character(object):
     def __init__(self, name, health, weapon, armor):
         self.name = name
@@ -184,19 +206,28 @@ class Character(object):
         self.weapon = weapon
         self.armor = armor
 
-    def take_damage(self, damage:int):
+    def take_damage(self, damage: int):
         if self.armor.hp > damage:
             print("No damage is done!")
         else:
             self.health -= damage - self.armor.hp
+            print("The attack hit for %d damage!" % (damage - self.armor.hp))
         print("%s has %d health left." % (self.name, self.health))
 
     def attack(self, target):
-        print("%s attacks %s for %d damage" % (self.name, target.name, self.weapon.damage))
-        target.take_damage(self.weapon.damage)
+        try:
+            print("%s attacks %s for %d damage" % (self.name, target.name, self.weapon.damage))
+            if random.randint(1, 100) <= self.weapon.dodge:
+                print("%s attacks %s for %d damage" % (self.name, target.name, self.weapon.damage))
+                target.take_damage(self.weapon.damage)
+                self.weapon.durability -= 1
+            else:
+                print("The attack missed!")
+        except AttributeError:
+            print("%s cannot attack! They do not have a weapon." % self.name)
 
 
-sword = Weapon("Sword", 10, 1000, 1)
+sword = Weapon("Sword", 10, 1000, 50)
 canoe = Weapon("Canoe", 42, 1000, 1)
 wiebe_armor = Armor("Armor of the gods", 5792, 1, 1)
 
@@ -205,6 +236,6 @@ flat_earther2 = Character("John", 10000, canoe, wiebe_armor)
 flat_earther3 = Character("Marge", 10000, canoe, wiebe_armor)
 flat_earther4 = Character("Ethan", 10000, canoe, wiebe_armor)
 
-
-
+flat_earther1.attack(flat_earther2)
+flat_earther1.attack(flat_earther2)
 
