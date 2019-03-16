@@ -200,15 +200,22 @@ class Door(Item):
 
 
 class Character(object):
-    def __init__(self, name, health, weapon, armor):
+    def __init__(self, name, health, weapon, helm, chest, leg, boot):
         self.name = name
         self.health = health
         self.weapon = weapon
-        self.armor = armor
+        self.helm = helm
+        self.chest = chest
+        self.leg = leg
+        self.boot = boot
+        self.armor = helm + chest + leg + boot
 
     def take_damage(self, damage: int):
         if self.armor.hp > damage:
-            print("No damage is done!")
+            print("No damage is done to %s!" % self.name)
+            print("%s's armor takes %d damage." % (self.name, damage))
+        elif self.armor.hp > 0:
+            print("%s has armor, but some damage gets through!")
         else:
             self.health -= damage - self.armor.hp
             print("The attack hit for %d damage!" % (damage - self.armor.hp))
@@ -218,7 +225,6 @@ class Character(object):
         try:
             print("%s attacks %s for %d damage" % (self.name, target.name, self.weapon.damage))
             if random.randint(1, 100) <= self.weapon.dodge:
-                print("%s attacks %s for %d damage" % (self.name, target.name, self.weapon.damage))
                 target.take_damage(self.weapon.damage)
                 self.weapon.durability -= 1
             else:
