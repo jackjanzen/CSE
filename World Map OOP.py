@@ -1,7 +1,12 @@
+import random
+
+
 class Room(object):
-    def __init__(self, name, desc, north=None, south=None, east=None, west=None, down=None, up=None, to_pit=None):
+    def __init__(self, name, desc, item, characters, north=None, south=None,
+                 east=None, west=None, down=None, up=None, to_pit=None):
         self.name = name
         self.desc = desc
+        self.item = item
         self.north = north
         self.south = south
         self.east = east
@@ -9,7 +14,7 @@ class Room(object):
         self.down = down
         self.up = up
         self.to_pit = to_pit
-        self.characters = []
+        self.characters = characters
 
     def print_desc(self):
         return self.desc
@@ -18,7 +23,65 @@ class Room(object):
 class Player(object):
     def __init__(self, starting_location):
         self.current_location = starting_location
-        self.inventory = []
+        self.inventory = [helmet, chestplate, leggings, boots]
+        self.health = 100
+        self.hm = 0
+        self.cp = 0
+        self.lg = 0
+        self.bt = 0
+        self.armor = self.hm + self.cp + self.lg + self.bt
+        self.helm = False
+        self.chest = False
+        self.leg = False
+        self.boot = False
+
+    def take_damage(self, damage: int):
+        if self.armor > damage:
+            self.armor -= damage
+            print("The attack smashes into your armor! your armor has "
+                  "%d health left." % self.armor)
+        elif self.armor < damage > 0:
+            hadamage = damage - self.armor
+            print("The attack breaks your armor! %d damage gets through." % hadamage)
+            self.health -= hadamage
+        elif self.armor <= 0:
+            self.health -= damage
+            print("The attack hit for %d damage!" % (damage - self.armor))
+        if self.armor > 0:
+            print("")
+        print("You have %d health left." % self.health)
+
+    def attack(self, target):
+        try:
+            print("You attack %s for %d damage." % (target.name, self.weapon.damage))
+            if random.randint(1, 100) <= self.weapon.dodge:
+                target.take_damage(self.weapon.damage)
+                self.weapon.durability -= 1
+            else:
+                print("The attack missed!")
+        except AttributeError:
+            print("%s cannot attack! They do not have a weapon." % self.name)
+
+    def armor_check(self):
+        for i in range(len(self.inventory)):
+            if issubclass(type(self.inventory[i]), Armor) is True:
+                # Helmet
+                if self.inventory[i].part == 1 and self.helm is False:
+                    self.hm = self.inventory[i].hp
+                    self.helm = True
+                # Chestplate
+                if self.inventory[i].part == 2 and self.chest is False:
+                    self.cp = self.inventory[i].hp
+                    self.chest = True
+                # Leggings
+                if self.inventory[i].part == 3 and self.leg is False:
+                    self.lg = self.inventory[i].hp
+                    self.leg = True
+                # Boots
+                if self.inventory[i].part == 4 and self.boot is False:
+                    self.bt = self.inventory[i].hp
+                    self.boot = True
+        self.armor = self.hm + self.cp + self.lg + self.bt
 
     def move(self, new_location):
         """This moves the player to a new room.
@@ -37,46 +100,524 @@ class Player(object):
         return globals()[name_of_room]
 
 
-class PeLady(object):
-    def __init__(self, desc=None, dialogue=None, ):
-        self.name = "Deidrie Henry"
+class Item(object):
+    def __init__(self, name):
+        self.name = name
+
+
+class Weapon(Item):
+    def __init__(self, name, damage, durability, dodge):
+        super(Weapon, self).__init__(name)
+        self.damage = damage
+        self.durability = durability
+        self.dodge = dodge
+        self.desc = "Name: " + str(name) + " || Damage: " + str(damage) + " || Durability: " + str(
+            durability) + " || Accuracy: " + str(dodge)
+
+    def desc_check(self):
+        self.desc = "Name: " + str(self.name) + " || Damage: " + str(self.damage) + " || Durability: " + str(
+            self.durability) + " || Accuracy: " + str(self.dodge)
+
+
+class Broadsword(Weapon):
+    def __init__(self):
+        super(Broadsword, self).__init__("Steel Broadsword", 34, 30, 75)
+
+
+class TIBroadsword(Weapon):
+    def __init__(self):
+        super(TIBroadsword, self).__init__("Tiger Iron Broadsword", 34, 40, 75)
+
+
+class BWBroadsword(Weapon):
+    def __init__(self):
+        super(BWBroadsword, self).__init__("Bloodworked Broadsword", 50, 30, 75)
+
+
+class Longsword(Weapon):
+    def __init__(self):
+        super(Longsword, self).__init__("Steel Longsword", 20, 50, 85)
+
+
+class TILongsword(Weapon):
+    def __init__(self):
+        super(TILongsword, self).__init__("Tiger Iron Longsword", 20, 60, 85)
+
+
+class BWLongsword(Weapon):
+    def __init__(self):
+        super(BWLongsword, self).__init__("Bloodworked Longsword", 30, 50, 85)
+
+
+class Greatsword(Weapon):
+    def __init__(self):
+        super(Greatsword, self).__init__("Steel Greatsword", 50, 80, 65)
+
+
+class TIGreatsword(Weapon):
+    def __init__(self):
+        super(TIGreatsword, self).__init__("Tiger Iron Greatsword", 50, 90, 65)
+
+
+class BWGreatsword(Weapon):
+    def __init__(self):
+        super(BWGreatsword, self).__init__("Bloodworked Greatsword", 75, 80, 65)
+
+
+class Bow(Weapon):
+    def __init__(self, arrows):
+        super(Bow, self).__init__("Wooden Longbow", 100, 100, 35)
+
+        self.arrows = arrows
+
+
+class TFBow(Weapon):
+    def __init__(self, arrows):
+        super(TFBow, self).__init__("True-Fire Longbow", 100, 100, 55)
+
+        self.arrows = arrows
+
+
+class MCBow(Weapon):
+    def __init__(self, arrows):
+        super(MCBow, self).__init__("Master-Crafted Longbow", 100, 110, 35)
+
+        self.arrows = arrows
+
+
+class Armor(Item):
+    def __init__(self, name, hp, part, crit):
+        super(Armor, self).__init__(name)
+        self.hp = hp
+        self.part = part
+        self.crit = crit
+
+
+class Chestplate(Armor):
+    def __init__(self):
+        super(Chestplate, self).__init__("Steel Chestplate", 75, 2, True)
+
+
+class TIChestplate(Armor):
+    def __init__(self):
+        super(TIChestplate, self).__init__("Tiger Iron Chestplate", 100, 2, True)
+
+
+class Leggings(Armor):
+    def __init__(self):
+        super(Leggings, self).__init__("Steel Leggings", 75, 3, True)
+
+
+class TILeggings(Armor):
+    def __init__(self):
+        super(TILeggings, self).__init__("Tiger Iron Leggings", 100, 3, True)
+
+
+class Boots(Armor):
+    def __init__(self):
+        super(Boots, self).__init__("Steel Boots", 25, 4, True)
+
+
+class TIBoots(Armor):
+    def __init__(self):
+        super(TIBoots, self).__init__("Tiger Iron Boots", 25, 4, True)
+
+
+class Helmet(Armor):
+    def __init__(self):
+        super(Helmet, self).__init__("Steel Helmet", 25, 1, False)
+
+
+class TIHelmet(Armor):
+    def __init__(self):
+        super(TIHelmet, self).__init__("Tiger Iron Helmet", 25, 1, False)
+
+
+class Consumable(Item):
+    def __init__(self, name, uses):
+        super(Consumable, self).__init__(name)
+        self.uses = uses
+
+
+class Potion(Consumable):
+    def __init__(self, name, effect):
+        super(Potion, self).__init__(name, 1)
+        self.effect = effect
+
+
+class HPotion(Potion):
+    def __init__(self):
+        super(HPotion, self).__init__("Lesser Health Potion", 1)
+
+
+class H2Potion(Potion):
+    def __init__(self):
+        super(H2Potion, self).__init__("Greater Health Potion", 2)
+
+
+class Invis(Potion):
+    def __init__(self):
+        super(Invis, self).__init__("Invisibility Potion", 3)
+
+
+class StartPage(Item):
+    def __init__(self):
+        super(StartPage, self).__init__("Welcome Page")
+        self.script = '''
+    Welcome to the world of Wiebalia, adventurer! Long ago, Dr. Wiebature invented 
+a time machine deep underground. In an attempt to destroy his invention, take the blueprints,
+and take credit for the construction, Dr. Wiebature's rival, Lord Heisenwiebe, caused the time
+machine to melt down and created a rift in time. Through the use of this rift, Lord Heisenwiebe
+met Al Capone and learned the ways of running the world through organized crime. Now, Lord
+Heisenwiebe rules with an iron fist. I am Dr. Wiebature, and I need your help. When he took
+over, I attempted to shut the rift to stop his advances, but by the time I succeeded, he
+already learned enough to take over the planet. I know that he has hidden the key to stopping
+him somewhere underground, but i am far too old to keep searching. Please brave adventurer,
+finish what I could not, and take back the land that should be ruled with peace, not terror.
+        Sincerely,
+            D.W.
+                      '''
+
+    def read(self):
+        print(self.script)
+
+
+class Enemy(object):
+    def __init__(self, name, health, weapon, armor, desc):
+        self.name = name
+        self.health = health
+        self.weapon = weapon
+        self.armor = armor
         self.desc = desc
-        self.dialogue = dialogue
+
+    def take_damage(self, damage: int):
+        if self.armor > damage:
+            self.armor -= damage
+            print("The attack smashes into %s's armor! %s's armor has "
+                  "%d health left." % (self.name, self.name, self.armor))
+        elif self.armor < damage > 0:
+            hadamage = damage - self.armor
+            print("The attack breaks %s's armor! %d damage gets through." % (self.name, hadamage))
+            self.health -= hadamage
+        elif self.armor <= 0:
+            self.health -= damage
+            print("The attack hit for %d damage!" % (damage - self.armor))
+        if self.armor > 0:
+            print("")
+        print("%s has %d health left." % (self.name, self.health))
+
+    def attack(self, target):
+        try:
+            print("%s attacks %s for %d damage" % (self.name, target.name, self.weapon.damage))
+            if random.randint(1, 100) <= self.weapon.dodge:
+                target.take_damage(self.weapon.damage)
+                self.weapon.durability -= 1
+            else:
+                print("The attack missed!")
+        except AttributeError:
+            print("%s cannot attack! They do not have a weapon." % self.name)
 
 
-WOFPIT = Room("West of Pit", "Welcome to 14 Qyzpn at Chili's: A Choose Your Own Adventure game! "
-                             "You stand in a clearing with a pit in the center. Near the edge of the pit, "
+class Flat(Enemy):
+    def __init__(self, num):
+        super(Flat, self).__init__("", 50, Broadsword(), 0, "A Flat Earther blocks your path.")
+        self.name = "Flat Earther " + str(num)
+
+
+class CCDeny(Enemy):
+    def __init__(self, num):
+        super(CCDeny, self).__init__("", 100, Longsword(), 0, "A Climate Change Denier blocks your path.")
+        self.name = "Climate Change Denier " + str(num)
+
+
+class BenShap(Enemy):
+    def __init__(self):
+        super(BenShap, self).__init__("Ben Shapiro", 100, Greatsword(), 200, "Ben Shapiro blocks your path."
+                                                                             " He tells you facts don't "
+                                                                             "care about your feelings.")
+
+
+class Igor(Enemy):
+    def __init__(self, num):
+        super(Igor, self).__init__("", 100, Longsword(), 0, "Igor blocks your path. He tells you to rob the "
+                                                            "bar cart.")
+        self.name = "Igor " + str(num)
+
+
+class Mob(Enemy):
+    def __init__(self, num):
+        super(Mob, self).__init__("", 50, Broadsword(), 0, "A Russian Mobster blocks your path. He says "
+                                                           "Привет я русский.")
+        self.name = "Mobster " + str(num)
+
+
+class Bert(Enemy):
+    def __init__(self):
+        super(Bert, self).__init__("The Machine", 100, BWGreatsword(), 125, "A shirtless fat man blocks your "
+                                                                            "path. "
+                                                                            "He keeps saying"
+                                                                            "'Я машина'. He is totally "
+                                                                            "hammered and drunkenly"
+                                                                            " instigates a battle.")
+
+
+class Mobile(Enemy):
+    def __init__(self, num):
+        super(Mobile, self).__init__("", 25, Longsword(), 0, "A Mobile Gamer blocks your path. He asks if you have"
+                                                             "games on your phone.")
+        self.name = "Mobile Gamer " + str(num)
+
+
+class GeoGamer(Enemy):
+    def __init__(self):
+        super(GeoGamer, self).__init__("Geometry Dash Gamer", 100, BWLongsword(), 50, "An avid Geometry Dash player"
+                                                                                      "blocks your path. He's"
+                                                                                      "humming 'Stereo Madness'.")
+
+
+class Frostbite(Enemy):
+    def __init__(self, num):
+        super(Frostbite, self).__init__("", 50, Broadsword(), 0, "What you get when you cross a vampire with a"
+                                                                 " snowman. A Frostbite blocks your path.")
+        self.name = "Frostbite " + str(num)
+
+
+class Untied(Enemy):
+    def __init__(self, num):
+        super(Untied, self).__init__("", 100, Longsword(), 0, "I don't know what they're laced with, but they'll"
+                                                              " have you tripping all day. An Untied Shoe"
+                                                              " blocks your path.")
+        self.name = "Untied Shoe " + str(num)
+
+
+class Kyle(Enemy):
+    def __init__(self):
+        super(Kyle, self).__init__("Kyle, King of Humor", 100, TILongsword(), 250, "It's Bad Joke Friday, but "
+                                                                                   "his jokes are so bad,"
+                                                                                   "they're going to "
+                                                                                   "send you back to Monday."
+                                                                                   " Kyle blocks your path.")
+
+
+# inits
+
+#   Items
+
+#       Armor
+
+boots = Boots()
+chestplate = Chestplate()
+helmet = Helmet()
+leggings = Leggings()
+tiboots = TIBoots()
+tichestplate = TIChestplate()
+tihelmet = TIHelmet()
+tileggings = TILeggings()
+
+#        Weapons
+
+broadsword = Broadsword()
+bwbroadsword = BWBroadsword()
+bwgreatsword = BWGreatsword()
+bwlongsword = BWLongsword()
+greatsword = Greatsword()
+longsword = Longsword()
+tibroadsword = TIBroadsword()
+tilongsword = TILongsword()
+tigreatsword = TIGreatsword()
+
+#        Potions
+
+h2potion1 = H2Potion()
+h2potion2 = H2Potion()
+h2potion3 = H2Potion()
+h2potion4 = H2Potion()
+h2potion5 = H2Potion()
+h2potion6 = H2Potion()
+h2potion7 = H2Potion()
+h2potion8 = H2Potion()
+h2potion9 = H2Potion()
+h2potion10 = H2Potion()
+h2potion11 = H2Potion()
+h2potion12 = H2Potion()
+h2potion13 = H2Potion()
+h2potion14 = H2Potion()
+h2potion15 = H2Potion()
+h2potion16 = H2Potion()
+h2potion17 = H2Potion()
+h2potion18 = H2Potion()
+h2potion19 = H2Potion()
+h2potion20 = H2Potion()
+h2potion21 = H2Potion()
+h2potion22 = H2Potion()
+h2potion23 = H2Potion()
+h2potion24 = H2Potion()
+h2potion25 = H2Potion()
+h2potion26 = H2Potion()
+h2potion27 = H2Potion()
+h2potion28 = H2Potion()
+h2potion29 = H2Potion()
+h2potion30 = H2Potion()
+
+hpotion1 = HPotion()
+hpotion2 = HPotion()
+hpotion3 = HPotion()
+hpotion4 = HPotion()
+hpotion5 = HPotion()
+hpotion6 = HPotion()
+hpotion7 = HPotion()
+hpotion8 = HPotion()
+hpotion9 = HPotion()
+hpotion10 = HPotion()
+hpotion11 = HPotion()
+hpotion12 = HPotion()
+hpotion13 = HPotion()
+hpotion14 = HPotion()
+hpotion15 = HPotion()
+hpotion16 = HPotion()
+hpotion17 = HPotion()
+hpotion18 = HPotion()
+hpotion19 = HPotion()
+hpotion20 = HPotion()
+hpotion21 = HPotion()
+hpotion22 = HPotion()
+hpotion23 = HPotion()
+hpotion24 = HPotion()
+hpotion25 = HPotion()
+hpotion26 = HPotion()
+hpotion27 = HPotion()
+hpotion28 = HPotion()
+hpotion29 = HPotion()
+hpotion30 = HPotion()
+
+invis1 = Invis()
+invis2 = Invis()
+invis3 = Invis()
+
+#        Papers
+
+startpage = StartPage()
+
+#        Enemies
+
+# South Chamber
+ccdeny1 = CCDeny(1)
+ccdeny2 = CCDeny(2)
+ccdeny3 = CCDeny(3)
+ccdeny4 = CCDeny(4)
+
+flat1 = Flat(1)
+flat2 = Flat(2)
+flat3 = Flat(3)
+flat4 = Flat(4)
+
+benshap = BenShap()
+
+# North Chamber
+mob1 = Mob(1)
+mob2 = Mob(2)
+mob3 = Mob(3)
+mob4 = Mob(4)
+
+igor1 = Igor(1)
+igor2 = Igor(2)
+igor3 = Igor(3)
+igor4 = Igor(4)
+
+bert = Bert()
+
+# West Chamber
+
+mobile1 = Mobile(1)
+mobile2 = Mobile(2)
+mobile3 = Mobile(3)
+mobile4 = Mobile(4)
+mobile5 = Mobile(5)
+mobile6 = Mobile(6)
+mobile7 = Mobile(7)
+mobile8 = Mobile(8)
+mobile9 = Mobile(9)
+mobile10 = Mobile(10)
+mobile11 = Mobile(11)
+mobile12 = Mobile(12)
+mobile13 = Mobile(13)
+mobile14 = Mobile(14)
+mobile15 = Mobile(15)
+mobile16 = Mobile(16)
+mobile17 = Mobile(17)
+mobile18 = Mobile(18)
+mobile19 = Mobile(19)
+mobile20 = Mobile(20)
+mobile21 = Mobile(21)
+mobile22 = Mobile(22)
+mobile23 = Mobile(23)
+
+geogamer = GeoGamer()
+
+# East Chamber
+
+frostbite1 = Frostbite(1)
+frostbite2 = Frostbite(2)
+frostbite3 = Frostbite(3)
+frostbite4 = Frostbite(4)
+
+untied1 = Untied(1)
+untied2 = Untied(2)
+untied3 = Untied(3)
+untied4 = Untied(4)
+
+kyle = Kyle()
+
+#        In Progress
+
+# tfbow = TFBow(None, 50)
+# mcbow = MCBow(None, 100)
+
+
+# Characters
+
+# Rooms
+
+
+WOFPIT = Room("West of Pit", "You stand in a clearing with a pit in the center. Near the edge of the pit, "
                              "a camp sits. It seems it has been abandoned for a long"
                              " time. \nTo the far south, you can see"
                              " the dark spires of a castle. "
                              "\nOn the ground beside you there is a letter. You should probably "
                              "read it "
-                             "before going further.", 'NOFPIT', 'SOFPIT', 'EOFPIT', None, None, 'UPOFPIT', 'EDGEOFPIT')
+                             "before going further.", [startpage], None, 'NOFPIT', 'SOFPIT', 'EOFPIT', None, None,
+              'UPOFPIT', 'EDGEOFPIT')
 NOFPIT = Room("North of Pit", "You can see more of the castle now. A large insignia is visible with the letters "
                               '"HW". \nColumns of smoke rise from the area behind the castle. They are extra'
                               " visible against the "
-                              "orange sunset sky.", None, "SOFPIT", "EOFPIT", "WOFPIT", None, "UPOFPIT", 'EDGEOFPIT')
+                              "orange sunset sky.", None, None, None, "SOFPIT", "EOFPIT", "WOFPIT", None, "UPOFPIT",
+              'EDGEOFPIT')
 SOFPIT = Room("South of Pit", "The smell of steel and oil combined with the feeling that an awful"
                               " artist is near dissuades you from going "
-                              "further south.", 'NOFPIT', None, "EOFPIT", "WOFPIT", None, 'UPOFPIT', 'EDGEOFPIT')
+                              "further south.", None, None, 'NOFPIT', None, "EOFPIT", "WOFPIT", None, 'UPOFPIT',
+              'EDGEOFPIT')
 EOFPIT = Room("East of Pit", "You can see the camp more clearly now. A lantern sits on top of a chest, the contents"
-                             " of which are unknown.", 'NOFPIT', 'SOFPIT', None, "WOFPIT", None, 'UPOFPIT', 'EDGEOFPIT')
-EDGEOFPIT = Room("Edge of Pit", "There is a chest here with a lantern "
-                                "sitting on top. It appears to \nbe unlocked. "
-                                "The pit before you is deep. If you jump down, you"
+                             " of which are unknown.", None, None, 'NOFPIT', 'SOFPIT', None, "WOFPIT", None, 'UPOFPIT',
+              'EDGEOFPIT')
+EDGEOFPIT = Room("Edge of Pit", "The pit before you is deep. If you jump down, you"
                                 "\nprobably won't be able to"
-                                " get back up.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", 'BOTOFPIT', 'UPOFPIT', None)
-UPOFPIT = Room("Up of Pit", "What?", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+                                " get back up.", None, None, 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", 'BOTOFPIT',
+                 'UPOFPIT', None)
+UPOFPIT = Room("Up of Pit", "What?", None, None, 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, 'UP2OFPIT', 'EDGEOFPIT')
 UP2OFPIT = Room("Up Up of Pit", "No, really, what's "
-                                "the goal here?", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+                                "the goal here?", None, None, 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, 'UP3OFPIT',
+                'EDGEOFPIT')
 UP3OFPIT = Room("Up Up Up of Pit", "Dude, "
-                                   "stop. Seriously.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+                                   "stop. Seriously.", None, None, 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None,
+                'UP4OFPIT', 'EDGEOFPIT')
 UP4OFPIT = Room("Up Up Up Up of Pit", "Can you please just do the quest? You know, I may be an omnipotent narrator, "
                                       "but I have to move "
-                                      "to follow you.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+                                      "to follow you.", None, None, 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None,
+                'UP5OFPIT', 'EDGEOFPIT')
 UP5OFPIT = Room("5(Up) of Pit", "What could you possibly want to go all the way up here? If you keep going, "
                                 "I'll have no choice "
-                                "but to call god.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+                                "but to call god.", None, None, 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None,
+                'UP6OFPIT', 'EDGEOFPIT')
 UP6OFPIT = Room("I'm getting tired of writing all these Ups.",
                 "Listen. This is Jack speaking. Yeah, THE Jack Elliot Janzen. The guy who made you and"
                 " put you here."
@@ -84,7 +625,7 @@ UP6OFPIT = Room("I'm getting tired of writing all these Ups.",
                 "I'm gonna have to send you back to West"
                 " of Pit. Neither of us want that, do we? So, I'll cut"
                 " you a deal. You go back NOW, or I'll send you "
-                "back by force.", 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, None, 'EDGEOFPIT')
+                "back by force.", None, None, 'NOFPIT', 'SOFPIT', "EOFPIT", "WOFPIT", None, 'WOFPIT', 'EDGEOFPIT')
 BOTOFPIT = Room("Bottom of Pit", "You land on the wet stone floor at the bottom of the pit. "
                                  "It was stupid to jump that far down and everything hurts."
                                  " If we're being realistic you'd be dead right now."
@@ -93,31 +634,37 @@ BOTOFPIT = Room("Bottom of Pit", "You land on the wet stone floor at the bottom 
                                  " that reads, 'Popeye's'. \nTo the south there is a dark room with strange noises"
                                  " coming from it. It would be wise to have a light with you before entering."
                                  " \nTo the east, there is a room with various pieces of "
-                                 "battle-ready equipment.", None, "SCNHALL", 'EQROOMPIT', 'PEPIT', None, None, None)
+                                 "battle-ready equipment.", None, None, None, "SCNHALL", 'EQROOMPIT', 'PEPIT',
+                None, None, None)
 PEPIT = Room("Popeye's", "The fluorescent lights on the ceiling make the restaurant impressively bright."
                          "\nThe smell of fried chicken fills the air. A nice lady is standing behind the counter."
                          " Perhaps you should ask her "
-                         "about the nature of this whimsical place.", None, None, 'BOTOFPIT', None, None, None, None)
+                         "about the nature of this "
+                         "whimsical place.", None, None, None, None, None, 'BOTOFPIT', None, None, None)
 EQROOMPIT = Room("Equipment Room", "There are various racks and armor stands arranged about the room."
                                    " Three swords are hung on one of the racks: a greatsword, a broadsword, and "
                                    "a longsword. \nYes, I use the Oxford "
                                    "Comma.\nThere is an armor stand. It has armor on it. "
                                    "\nThere is a locked gate on the "
-                                   "northern wall.", 'NCEHALL', None, None, 'BOTOFPIT', None, None, None)
+                                   "northern wall.", [helmet, chestplate, leggings, boots, broadsword, greatsword,
+                                                      longsword],
+                                   None, 'NCEHALL', None, None, 'BOTOFPIT', None, None, None)
 SCNHALL = Room("South Chamber | North Hall", "Some guy that puts milk in before cereal blocks your path."
                                              " No one knows why he does this, he just"
                                              " does, and will argue with anyone that disagrees.\n"
                                              "To the East and West, there are two hallways. They curve to the south,"
                                              " but you can't see any "
                                              "light coming from "
-                                             "there.", 'BOTOFPIT', None, 'NCEHALL', 'NCWHALL', None, None, None)
+                                             "there.", None, [ccdeny1, flat1], 'BOTOFPIT', None, 'NCEHALL', 'NCWHALL',
+               None, None, None)
 SCWHALL = Room("South Chamber | West Hall", "Two Flat Earthers block your path. As soon as you walk into the room,"
                                             " they tell you about themselves. It's a married vegan couple named"
                                             " Marge and Ethan, \nwho have two children. \nWho are, of course,"
                                             " unvaccinated.\nAfter getting into a heated debate with them"
                                             " on the SHAPE OF THE EARTH, they begin to instigate a battle."
                                             "\nTo the North and the South, there are hallways."
-                                            "", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
+                                            "", None, [ccdeny2, flat2], 'SCNHALL', 'SCSHALL', None, None, None, None,
+               None)
 SCEHALL = Room("South Chamber | East Hall", "Two Flat Earthers block your path. As soon as you walk into the room,"
                                             " they tell you about themselves. \nIt's a married couple named"
                                             " John and Katherine, who have three children. Who are, of course,"
@@ -126,65 +673,152 @@ SCEHALL = Room("South Chamber | East Hall", "Two Flat Earthers block your path. 
                                             "\nWhat an idiot.\nAfter getting into a heated debate with them"
                                             " on the SHAPE OF THE EARTH, they begin to instigate a battle."
                                             "\nTo the North and the South, there are "
-                                            "hallways.", 'SCNHALL', 'SCSHALL', None, None, None, None, None)
+                                            "hallways.", None, [ccdeny3, flat3], 'SCNHALL', 'SCSHALL', None, None, None, None, None)
 SCSHALL = Room("South Chamber | South Hall", "A Climate Change"
                                              "denier and a Flat Earther block your path. Need I say more?"
                                              "\nTo the East, West, and North there are hallways."
-                                             "", 'SCCENT', None, 'SCEHALL', 'SCWHALL', None, None, None)
+                                             "", None, [ccdeny4, flat4], 'SCCENT', None, 'SCEHALL', 'SCWHALL', None, None, None)
 SCCENT = Room("South Chamber | Center", "Ben Shapiro himself blocks your path."
                                         "\n Rumor has it he ate 50,000 liberals in one sitting.\nWith his sharp wit,"
                                         "he dumbfounds you with pure FACTS and LOGIC, and begins to instigate a battle"
                                         ".\nTo the South there is a hallway."
-                                        "", None, 'SCSHALL', None, None, None, None, None)
-NCEHALL = Room("North Chamber | East Hall", "x", 'NCNHALL', 'NCSHALL', 'EQROOMPIT', None, None, None, None)
-NCNHALL = Room("North Chamber | North Hall", "x", None, None, 'NCEHALL', 'NCWHALL', None, None, None)
-NCSHALL = Room("North Chamber | South Hall", "x", None, None, 'NCEHALL', 'NCWHALL', None, None, None)
-NCWHALL = Room("North Chamber | West Hall", "x", 'NCNHALL', 'NCSHALL', 'NCCENT', None, None, None, None)
-NCCENT = Room("North Chamber | Center", "x", None, 'PENC', 'LDLABS', 'NCWHALL', None, None, None)
-PENC = Room("Popeye's", "x", 'NCCENT', None, None, None, None, None, None)
-LDLABS = Room("Long's Drugs", "x", None, 'WBTURE', None, 'NCCENT', None, None, None)
-WBTURE = Room("Weiberture Science Laboratory", "x", 'LDLABS', None, 'ECNHALL', 'PEWC', None, None, None)
-PEWC = Room("Popeye's", "x", None, 'WCNHALL', 'WBTURE', None, None, None, None)
-ECNHALL = Room("East Chamber | North Hall", "x", 'WBTURE', None, 'ECEHALL', 'ECWHALL', None, None, None)
-ECWHALL = Room("East Chamber | West Hall", "x", 'ECNHALL', 'ECSHALL', None, None, None, None, None)
-ECEHALL = Room("East Chamber | East Hall", "x", 'ECNHALL', 'ECSHALL', None, None, None, None, None)
-ECSHALL = Room("East Chamber | South Hall", "x", 'ECCENT', None, 'ECEHALL', 'ECWHALL', None, None, None)
-ECCENT = Room("East Chamber | Center", "x", None, 'ECSHALL', None, None, None, None, None)
-WCNHALL = Room("West Chamber | North Hall", "x", 'PEWC', None, 'WCEHALL', 'WCWHALL', None, None, None)
-WCWHALL = Room("West Chamber | West Hall", "x", 'WCNHALL', 'WCSHALL', None, None, None, None, None)
-WCEHALL = Room("West Chamber | East Hall", "x", 'WCNHALL', "WCSHALL", None, None, None, None, None)
-WCSHALL = Room("West Chamber | South Hall", "x", 'WCCENT', None, 'WCEHALL', 'WCWHALL', None, None, None)
-WCCENT = Room("West Chamber | Center", "x", None, 'WCSHALL', None, None, None, None, None)
+                                        "", [greatsword, tileggings], [benshap], None, 'SCSHALL', None, None, None, None, None)
+NCEHALL = Room("North Chamber | East Hall", "x", None, [igor1, mob1], 'NCNHALL', 'NCSHALL', 'EQROOMPIT', None, None, None, None)
+NCNHALL = Room("North Chamber | North Hall", "x", None, [igor2, mob2], None, None, 'NCEHALL', 'NCWHALL', None, None, None)
+NCSHALL = Room("North Chamber | South Hall", "x", None, [igor3, mob3], None, None, 'NCEHALL', 'NCWHALL', None, None, None)
+NCWHALL = Room("North Chamber | West Hall", "x", None, [igor4, mob4], 'NCNHALL', 'NCSHALL', 'NCCENT', None, None, None, None)
+NCCENT = Room("North Chamber | Center", "x", [bwlongsword, tiboots], [bert], None, 'PENC', 'LDLABS', 'NCWHALL', None, None, None)
+PENC = Room("Popeye's", "x", None, None, 'NCCENT', None, None, None, None, None, None)
+LDLABS = Room("Long's Drugs", "x", None, None, None, 'WBTURE', None, 'NCCENT', None, None, None)
+WBTURE = Room("Weiberture Science Laboratory", "x", [tichestplate, tihelmet, invis1, invis2, invis3], None, 'LDLABS', None, 'ECNHALL', 'PEWC', None, None, None)
+PEWC = Room("Popeye's", "x", None, None, None, 'WCNHALL', 'WBTURE', None, None, None, None)
+ECNHALL = Room("East Chamber | North Hall", "x", [frostbite1, untied1], None, 'WBTURE', None, 'ECEHALL', 'ECWHALL', None, None, None)
+ECWHALL = Room("East Chamber | West Hall", "x", [frostbite2, untied2], None, 'ECNHALL', 'ECSHALL', None, None, None, None, None)
+ECEHALL = Room("East Chamber | East Hall", "x", [frostbite3, untied3], None, 'ECNHALL', 'ECSHALL', None, None, None, None, None)
+ECSHALL = Room("East Chamber | South Hall", "x", [frostbite4, untied4], None, 'ECCENT', None, 'ECEHALL', 'ECWHALL', None, None, None)
+ECCENT = Room("East Chamber | Center", "x", [tibroadsword], [kyle], None, 'ECSHALL', None, None, None, None, None)
+WCNHALL = Room("West Chamber | North Hall", "x", None, [mobile1, mobile2, mobile3, mobile4, mobile5], 'PEWC', None, 'WCEHALL', 'WCWHALL', None, None, None)
+WCWHALL = Room("West Chamber | West Hall", "x", None, [mobile6, mobile7, mobile8, mobile9, mobile10], 'WCNHALL', 'WCSHALL', None, None, None, None, None)
+WCEHALL = Room("West Chamber | East Hall", "x", None, [mobile11, mobile12, mobile13, mobile14, mobile15], 'WCNHALL', "WCSHALL", None, None, None, None, None)
+WCSHALL = Room("West Chamber | South Hall", "x", None, [mobile16, mobile17, mobile18, mobile19, mobile20], 'WCCENT', None, 'WCEHALL', 'WCWHALL', None, None, None)
+WCCENT = Room("West Chamber | Center", "x", [tigreatsword], [geogamer, mobile21, mobile22, mobile23], None, 'WCSHALL', None, None, None, None, None)
 
-current_location = SCSHALL
-print(current_location.name)
-print(current_location.desc)
+# Player
 player = Player(WOFPIT)
-'''
+
+current_location = player.current_location
+
 # Controller
 playing = True
 directions = ['north', 'south', 'east', 'west', 'up', 'down']
-# short_directions = ['n', 's', 'e', 'w', 'u', 'd']
-# misc_comm = ["to pit"]
-# short_mc = ["pit"]
+short_directions = ['n', 's', 'e', 'w', 'u', 'd']
+misc_comm = ["to_pit"]
+short_mc = ["pit"]
+event = False
 while playing:
-    print(player.current_location.name)
-    print(player.current_location.desc)
-    command = input(">_")
-    # if command.lower() in short_directions:
-    #     index = short_directions.index(command.lower)
-    #     command = directions[index]
-    # elif command.lower() in short_mc:
-    #     index = short_mc.index(command.lower())
-    #     command = misc_comm[index]
-    if command.lower() in ['q', 'quit', 'exit']:
-        playing = False
-    elif command.lower() in directions:  # or command.lower() in misc_comm:
+    if event is False:
+        print(player.current_location.name)
+        print(player.current_location.desc)
+    # --------------DEBUG--------------
         try:
-            next_room = player.find_next_room(command.lower())
-            player.move(next_room)
-        except KeyError:
-            print("I can't go that way.")
+            x = False
+            if player.current_location.item is []:
+                player.current_location.item = None
+            else:
+                for i in range(len(player.current_location.item)):
+                    if x is False:
+                        x = True
+                        print("Items:")
+                print(player.current_location.item[i].name)
+        except TypeError:
+            print("There are no items here.")
+        try:
+            print("Characters:" + "".join(current_location.characters))
+        except TypeError:
+            print("There is no one here.")
+    # ---------------------------------
+        command = input(">_")
+        if command.lower() in short_directions:
+            index = short_directions.index(command.lower())
+            command = directions[index]
+        elif command.lower() in short_mc:
+            index = short_mc.index(command.lower())
+            command = misc_comm[index]
+        if command.lower() in ['q', 'quit', 'exit']:
+            playing = False
+        elif command.lower() in directions or command.lower() in misc_comm:
+            try:
+                next_room = player.find_next_room(command.lower())
+                player.move(next_room)
+            except KeyError:
+                print("I can't go that way.")
+        elif command.lower()[0:4] == "take":
+            event = True
+            command1 = "take"
+            jac = command.lower().split()
+            thing = " ".join(jac[1:])
+            try:
+                for i in range(len(player.current_location.item)):
+                    grabbed = False
+                    if player.current_location.item[i - 1].name.lower() == thing.lower():
+                        itemindex = i - 1
+                        player.inventory.append(player.current_location.item[itemindex])
+                        print(player.current_location.item[itemindex].name + " has been added to your inventory.")
+                        player.current_location.item.pop(itemindex)
+                        grabbed = True
+                if grabbed is False:
+                    print("That item is not here.")
+            except TypeError:
+                print("There is nothing to pick up.")
+        elif command.lower() == "inventory":
+            event = True
+            for i in range(len(player.inventory)):
+                print(player.inventory[i].name)
+        elif command.lower() == "describe":
+            event = False
+        else:
+            event = True
+            print("Command Not Found")
     else:
-        print("Command Not Found")
-'''
+        command = input(">_")
+        if command.lower() in short_directions:
+            index = short_directions.index(command.lower())
+            command = directions[index]
+        elif command.lower() in short_mc:
+            index = short_mc.index(command.lower())
+            command = misc_comm[index]
+        if command.lower() in ['q', 'quit', 'exit']:
+            playing = False
+        elif command.lower() in directions or command.lower() in misc_comm:
+            try:
+                next_room = player.find_next_room(command.lower())
+                player.move(next_room)
+            except KeyError:
+                print("I can't go that way.")
+        elif command.lower()[0:4] == "take":
+            event = True
+            command1 = "take"
+            jac = command.lower().split()
+            thing = " ".join(jac[1:])
+            try:
+                for i in range(len(player.current_location.item)):
+                    grabbed = False
+                    if player.current_location.item[i - 1].name.lower() == thing.lower():
+                        itemindex = i - 1
+                        player.inventory.append(player.current_location.item[itemindex])
+                        print(player.current_location.item[itemindex].name + " has been added to your inventory.")
+                        player.current_location.item.pop(itemindex)
+                        grabbed = True
+                if grabbed is False:
+                    print("That item is not here.")
+            except TypeError:
+                print("There is nothing to pick up.")
+        elif command.lower() == "inventory":
+            event = True
+            for i in range(len(player.inventory)):
+                print(player.inventory[i].name)
+        elif command.lower() == "describe":
+            event = False
+        else:
+            event = True
+            print("Command Not Found")
