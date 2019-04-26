@@ -34,8 +34,18 @@ class Player(object):
         self.chest = False
         self.leg = False
         self.boot = False
+        self.weapon = None
 
-    def take_damage(self, damage: int):
+    def weapon_default(self):
+        possible_weapons = []
+        for i in range(len(player.inventory)):
+            if issubclass(type(self.inventory[i], Weapon)) is True:
+                possible_weapons.append(self.inventory[i])
+                y = i
+        if len(possible_weapons) == 0:
+            self.weapon = self.inventory[y]
+
+    def take_damage(self, damage, int):
         if self.armor > damage:
             self.armor -= damage
             print("The attack smashes into your armor! your armor has "
@@ -290,7 +300,7 @@ class Enemy(object):
         self.armor = armor
         self.desc = desc
 
-    def take_damage(self, damage: int):
+    def take_damage(self, damage, int):
         if self.armor > damage:
             self.armor -= damage
             print("The attack smashes into %s's armor! %s's armor has "
@@ -347,7 +357,7 @@ class Igor(Enemy):
 class Mob(Enemy):
     def __init__(self, num):
         super(Mob, self).__init__("", 50, Broadsword(), 0, "A Russian Mobster blocks your path. He says "
-                                                           "Привет я русский.")
+                                                           "'Igor! Rob the bar cart!'")
         self.name = "Mobster " + str(num)
 
 
@@ -356,7 +366,7 @@ class Bert(Enemy):
         super(Bert, self).__init__("The Machine", 100, BWGreatsword(), 125, "A shirtless fat man blocks your "
                                                                             "path. "
                                                                             "He keeps saying"
-                                                                            "'Я машина'. He is totally "
+                                                                            "'I am the machine'. He is totally "
                                                                             "hammered and drunkenly"
                                                                             " instigates a battle.")
 
@@ -673,35 +683,53 @@ SCEHALL = Room("South Chamber | East Hall", "Two Flat Earthers block your path. 
                                             "\nWhat an idiot.\nAfter getting into a heated debate with them"
                                             " on the SHAPE OF THE EARTH, they begin to instigate a battle."
                                             "\nTo the North and the South, there are "
-                                            "hallways.", None, [ccdeny3, flat3], 'SCNHALL', 'SCSHALL', None, None, None, None, None)
+                                            "hallways.", None, [ccdeny3, flat3], 'SCNHALL', 'SCSHALL', None,
+               None, None, None, None)
 SCSHALL = Room("South Chamber | South Hall", "A Climate Change"
                                              "denier and a Flat Earther block your path. Need I say more?"
                                              "\nTo the East, West, and North there are hallways."
-                                             "", None, [ccdeny4, flat4], 'SCCENT', None, 'SCEHALL', 'SCWHALL', None, None, None)
+                                             "", None, [ccdeny4, flat4], 'SCCENT', None, 'SCEHALL', 'SCWHALL',
+               None, None, None)
 SCCENT = Room("South Chamber | Center", "Ben Shapiro himself blocks your path."
                                         "\n Rumor has it he ate 50,000 liberals in one sitting.\nWith his sharp wit,"
                                         "he dumbfounds you with pure FACTS and LOGIC, and begins to instigate a battle"
                                         ".\nTo the South there is a hallway."
-                                        "", [greatsword, tileggings], [benshap], None, 'SCSHALL', None, None, None, None, None)
-NCEHALL = Room("North Chamber | East Hall", "x", None, [igor1, mob1], 'NCNHALL', 'NCSHALL', 'EQROOMPIT', None, None, None, None)
-NCNHALL = Room("North Chamber | North Hall", "x", None, [igor2, mob2], None, None, 'NCEHALL', 'NCWHALL', None, None, None)
-NCSHALL = Room("North Chamber | South Hall", "x", None, [igor3, mob3], None, None, 'NCEHALL', 'NCWHALL', None, None, None)
-NCWHALL = Room("North Chamber | West Hall", "x", None, [igor4, mob4], 'NCNHALL', 'NCSHALL', 'NCCENT', None, None, None, None)
-NCCENT = Room("North Chamber | Center", "x", [bwlongsword, tiboots], [bert], None, 'PENC', 'LDLABS', 'NCWHALL', None, None, None)
+                                        "", [greatsword, tileggings], [benshap], None, 'SCSHALL', None, None, None,
+              None, None)
+NCEHALL = Room("North Chamber | East Hall", "x", None, [igor1, mob1], 'NCNHALL', 'NCSHALL', 'EQROOMPIT', None, None,
+               None, None)
+NCNHALL = Room("North Chamber | North Hall", "x", None, [igor2, mob2], None, None, 'NCEHALL', 'NCWHALL', None,
+               None, None)
+NCSHALL = Room("North Chamber | South Hall", "x", None, [igor3, mob3], None, None, 'NCEHALL', 'NCWHALL', None,
+               None, None)
+NCWHALL = Room("North Chamber | West Hall", "x", None, [igor4, mob4], 'NCNHALL', 'NCSHALL', 'NCCENT', None,
+               None, None, None)
+NCCENT = Room("North Chamber | Center", "x", [bwlongsword, tiboots], [bert], None, 'PENC', 'LDLABS', 'NCWHALL',
+              None, None, None)
 PENC = Room("Popeye's", "x", None, None, 'NCCENT', None, None, None, None, None, None)
 LDLABS = Room("Long's Drugs", "x", None, None, None, 'WBTURE', None, 'NCCENT', None, None, None)
-WBTURE = Room("Weiberture Science Laboratory", "x", [tichestplate, tihelmet, invis1, invis2, invis3], None, 'LDLABS', None, 'ECNHALL', 'PEWC', None, None, None)
+WBTURE = Room("Weiberture Science Laboratory", "x", [tichestplate, tihelmet, invis1, invis2, invis3], None, 'LDLABS',
+              None, 'ECNHALL', 'PEWC', None, None, None)
 PEWC = Room("Popeye's", "x", None, None, None, 'WCNHALL', 'WBTURE', None, None, None, None)
-ECNHALL = Room("East Chamber | North Hall", "x", [frostbite1, untied1], None, 'WBTURE', None, 'ECEHALL', 'ECWHALL', None, None, None)
-ECWHALL = Room("East Chamber | West Hall", "x", [frostbite2, untied2], None, 'ECNHALL', 'ECSHALL', None, None, None, None, None)
-ECEHALL = Room("East Chamber | East Hall", "x", [frostbite3, untied3], None, 'ECNHALL', 'ECSHALL', None, None, None, None, None)
-ECSHALL = Room("East Chamber | South Hall", "x", [frostbite4, untied4], None, 'ECCENT', None, 'ECEHALL', 'ECWHALL', None, None, None)
+ECNHALL = Room("East Chamber | North Hall", "x", [frostbite1, untied1], None, 'WBTURE', None, 'ECEHALL', 'ECWHALL',
+               None, None, None)
+ECWHALL = Room("East Chamber | West Hall", "x", [frostbite2, untied2], None, 'ECNHALL', 'ECSHALL',
+               None, None, None, None, None)
+ECEHALL = Room("East Chamber | East Hall", "x", [frostbite3, untied3], None, 'ECNHALL', 'ECSHALL',
+               None, None, None, None, None)
+ECSHALL = Room("East Chamber | South Hall", "x", [frostbite4, untied4], None, 'ECCENT', None, 'ECEHALL', 'ECWHALL',
+               None, None, None)
 ECCENT = Room("East Chamber | Center", "x", [tibroadsword], [kyle], None, 'ECSHALL', None, None, None, None, None)
-WCNHALL = Room("West Chamber | North Hall", "x", None, [mobile1, mobile2, mobile3, mobile4, mobile5], 'PEWC', None, 'WCEHALL', 'WCWHALL', None, None, None)
-WCWHALL = Room("West Chamber | West Hall", "x", None, [mobile6, mobile7, mobile8, mobile9, mobile10], 'WCNHALL', 'WCSHALL', None, None, None, None, None)
-WCEHALL = Room("West Chamber | East Hall", "x", None, [mobile11, mobile12, mobile13, mobile14, mobile15], 'WCNHALL', "WCSHALL", None, None, None, None, None)
-WCSHALL = Room("West Chamber | South Hall", "x", None, [mobile16, mobile17, mobile18, mobile19, mobile20], 'WCCENT', None, 'WCEHALL', 'WCWHALL', None, None, None)
-WCCENT = Room("West Chamber | Center", "x", [tigreatsword], [geogamer, mobile21, mobile22, mobile23], None, 'WCSHALL', None, None, None, None, None)
+WCNHALL = Room("West Chamber | North Hall", "x", None, [mobile1, mobile2, mobile3, mobile4, mobile5], 'PEWC',
+               None, 'WCEHALL', 'WCWHALL', None, None, None)
+WCWHALL = Room("West Chamber | West Hall", "x", None, [mobile6, mobile7, mobile8, mobile9, mobile10], 'WCNHALL',
+               'WCSHALL', None, None, None, None, None)
+WCEHALL = Room("West Chamber | East Hall", "x", None, [mobile11, mobile12, mobile13, mobile14, mobile15], 'WCNHALL',
+               "WCSHALL", None, None, None, None, None)
+WCSHALL = Room("West Chamber | South Hall", "x", None, [mobile16, mobile17, mobile18, mobile19, mobile20],
+               'WCCENT', None, 'WCEHALL', 'WCWHALL', None, None, None)
+WCCENT = Room("West Chamber | Center", "x", [tigreatsword], [geogamer, mobile21, mobile22, mobile23], None,
+              'WCSHALL', None, None, None, None, None)
 
 # Player
 player = Player(WOFPIT)
@@ -720,16 +748,17 @@ while playing:
         print(player.current_location.name)
         print(player.current_location.desc)
     # --------------DEBUG--------------
+        if player.current_location.item is []:
+            player.current_location.item = None
         try:
+            if player.current_location.item = None:
+                
             x = False
-            if player.current_location.item is []:
-                player.current_location.item = None
-            else:
-                for i in range(len(player.current_location.item)):
-                    if x is False:
-                        x = True
-                        print("Items:")
-                print(player.current_location.item[i].name)
+            for i in range(len(player.current_location.item)):
+                if x is False:
+                    x = True
+                    print("Items:")
+            print(player.current_location.item[i].name)
         except TypeError:
             print("There are no items here.")
         try:
