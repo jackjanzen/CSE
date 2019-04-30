@@ -748,20 +748,24 @@ while playing:
         print(player.current_location.name)
         print(player.current_location.desc)
     # --------------DEBUG--------------
-        if player.current_location.item is []:
-            player.current_location.item = None
         try:
-            if player.current_location.item is None:
-                print("There are no items here.")
-            else:
+            if len(player.current_location.item) is 0:
+                player.current_location.item = None
+        except TypeError:
+            pass
+        if player.current_location.item is None:
+            print("There are no items here.")
+        else:
+            try:
                 x = False
                 for i in range(len(player.current_location.item)):
                     if x is False:
                         x = True
                         print("Items:")
-                print(player.current_location.item[i].name)
-        except TypeError:
-            print("There are no items here.")
+                    print(player.current_location.item[i].name)
+                x = False
+            except TypeError:
+                pass
         try:
             print("Characters:" + "".join(current_location.characters))
         except TypeError:
