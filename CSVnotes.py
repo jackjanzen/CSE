@@ -21,24 +21,22 @@ def divisible_by_2(num: str):
     return False
 
 
-def validate_cc(num: str):
-    pass
-
-
-def check_16(num:str)
-
-
-def digit_drop(num: str)
-
-
-def reverse(num: str)
-
-
-def multiply_oddpos_by_2(num: str):
-
-
-def sub9over9(num: str):
-    
+    # def validate_cc(num: str):
+    #     list(num)
+    #
+    # def check_16(num: str):
+    #
+    # def digit_drop(num: str):
+    #
+    # def reverse(num: str):
+    #
+    # def multiply_oddpos_by_2(num: str):
+    #
+    # def sub9over9(num: str):
+    #
+    # def addall(num: str):
+    #
+    # def mod10(num: str):
 
 
 # with open("Book1.csv", "r") as old_csv:
@@ -103,6 +101,13 @@ def sub9over9(num: str):
 #                 writer.writerow(row)
 # print("OK")
 
+def reverse(string):
+    return string[::-1]
+
+
+reverse_thing = reverse("Hello World")
+
+print(reverse_thing)
 
 with open("Book1.csv", "r") as old_csv:
     with open("MyNewFile.csv", "w", newline='') as new_csv:
@@ -113,6 +118,6 @@ with open("Book1.csv", "r") as old_csv:
         for row in reader:
             # old_number = int(row[0]) + 1
             old_number = row[0]
-            if validate_cc(old_number) is True:
+            if validate(old_number) is True:
                 writer.writerow(row)
 print("OK")
