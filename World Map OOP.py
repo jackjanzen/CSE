@@ -70,7 +70,7 @@ class Player(object):
             else:
                 print("The attack missed!")
         except AttributeError:
-            print("%s cannot attack! They do not have a weapon." % self.name)
+            print("You cannot attack! You do not have a weapon.")
 
     def armor_check(self):
         for i in range(len(self.inventory)):
@@ -818,15 +818,18 @@ while playing:
         if command.lower() in short_directions:
             index = short_directions.index(command.lower())
             command = directions[index]
+            event = False
         elif command.lower() in short_mc:
             index = short_mc.index(command.lower())
             command = misc_comm[index]
+            event = False
         if command.lower() in ['q', 'quit', 'exit']:
             playing = False
         elif command.lower() in directions or command.lower() in misc_comm:
             try:
                 next_room = player.find_next_room(command.lower())
                 player.move(next_room)
+                event = False
             except KeyError:
                 print("I can't go that way.")
         elif command.lower()[0:4] == "take":
