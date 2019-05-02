@@ -800,8 +800,8 @@ while playing:
                         print(player.current_location.item[itemindex].name + " has been added to your inventory.")
                         player.current_location.item.pop(itemindex)
                         grabbed = True
-                if grabbed is False:
-                    print("That item is not here.")
+                else:
+                print("That item is not here.")
             except TypeError:
                 print("There is nothing to pick up.")
         elif command.lower() == "inventory":

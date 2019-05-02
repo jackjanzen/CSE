@@ -39,6 +39,7 @@ def sub9over9(num):
     for idx in range(len(num)):
         if int(num[idx]) > 9:
             num[idx] = str(int(num[idx]) - 9)
+    return num
 
 
 def addall(num):
@@ -68,7 +69,8 @@ def validate_cc(num):
         multi_num_list = multiply_oddpos_by_2(reverse_num_list)
         # print("multioddby2_num")
         # print(multi_num_list)
-        aggregate = addall(multi_num_list)
+        sub9_list = sub9over9(multi_num_list)
+        aggregate = addall(sub9_list)
         # print("aggregate")
         # print(aggregate)
         modnum = mod10(aggregate)
@@ -99,5 +101,3 @@ with open("Book1.csv", "r") as old_csv:
 print("Invalid Credit Card Numbers: %d" % x)
 print("Valid Credit Card Numbers: %d" % y)
 print("OK")
-
-
