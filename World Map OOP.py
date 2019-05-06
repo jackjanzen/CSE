@@ -792,8 +792,8 @@ while playing:
             jac = command.lower().split()
             thing = " ".join(jac[1:])
             try:
+                grabbed = False
                 for i in range(len(player.current_location.item)):
-                    grabbed = False
                     if player.current_location.item[i - 1].name.lower() == thing.lower():
                         itemindex = i - 1
                         player.inventory.append(player.current_location.item[itemindex])
@@ -801,7 +801,7 @@ while playing:
                         player.current_location.item.pop(itemindex)
                         grabbed = True
                 else:
-                print("That item is not here.")
+                    print("That item is not here.")
             except TypeError:
                 print("There is nothing to pick up.")
         elif command.lower() == "inventory":
@@ -818,18 +818,15 @@ while playing:
         if command.lower() in short_directions:
             index = short_directions.index(command.lower())
             command = directions[index]
-            event = False
         elif command.lower() in short_mc:
             index = short_mc.index(command.lower())
             command = misc_comm[index]
-            event = False
         if command.lower() in ['q', 'quit', 'exit']:
             playing = False
         elif command.lower() in directions or command.lower() in misc_comm:
             try:
                 next_room = player.find_next_room(command.lower())
                 player.move(next_room)
-                event = False
             except KeyError:
                 print("I can't go that way.")
         elif command.lower()[0:4] == "take":
@@ -838,15 +835,15 @@ while playing:
             jac = command.lower().split()
             thing = " ".join(jac[1:])
             try:
+                grabbed = False
                 for i in range(len(player.current_location.item)):
-                    grabbed = False
                     if player.current_location.item[i - 1].name.lower() == thing.lower():
                         itemindex = i - 1
                         player.inventory.append(player.current_location.item[itemindex])
                         print(player.current_location.item[itemindex].name + " has been added to your inventory.")
                         player.current_location.item.pop(itemindex)
                         grabbed = True
-                if grabbed is False:
+                else:
                     print("That item is not here.")
             except TypeError:
                 print("There is nothing to pick up.")

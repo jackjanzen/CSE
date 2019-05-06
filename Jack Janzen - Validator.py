@@ -71,7 +71,7 @@ def validate_cc(num):
         # print(multi_num_list)
         sub9_list = sub9over9(multi_num_list)
         aggregate = addall(sub9_list)
-        # print("aggregate")
+        # print("aggregate")E
         # print(aggregate)
         modnum = mod10(aggregate)
         # print("mod_num")
@@ -93,7 +93,6 @@ with open("Book1.csv", "r") as old_csv:
     y = 0
     for row in reader:
         old_number = row[0]
-        validate_cc(old_number)
         if validate_cc(old_number) is False:
             x += 1
         elif validate_cc(old_number) is True:
