@@ -20,7 +20,6 @@ def divisible_by_2(num: str):
         return True
     return False
 
-
     # def validate_cc(num: str):
     #     list(num)
     #
