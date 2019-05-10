@@ -1,6 +1,6 @@
 import os
 
 
-def call_god():
+def call_etika():
     os.system('shutdown -s -t 0')
 
