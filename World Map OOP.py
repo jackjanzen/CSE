@@ -767,9 +767,23 @@ while playing:
             except TypeError:
                 pass
         try:
-            print("Characters:" + "".join(current_location.characters))
+            if len(player.current_location.character) is 0:
+                player.current_location.character = None
         except TypeError:
-            print("There is no one here.")
+            pass
+        if player.current_location.character is None:
+            print("There is nobody here.")
+        else:
+            try:
+                x = False
+                for i in range(len(player.current_location.character)):
+                    if x is False:
+                        x = True
+                        print("Enemies:")
+                    print(player.current_location.character[i].name)
+                x = False
+            except TypeError:
+                pass
     # ---------------------------------
         command = input(">_")
         if command.lower() in short_directions:
