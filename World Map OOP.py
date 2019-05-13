@@ -2,7 +2,7 @@ import random
 
 
 class Room(object):
-    def __init__(self, name, desc, item, characters, north=None, south=None,
+    def __init__(self, name, desc, item, character, north=None, south=None,
                  east=None, west=None, down=None, up=None, to_pit=None):
         self.name = name
         self.desc = desc
@@ -14,7 +14,7 @@ class Room(object):
         self.down = down
         self.up = up
         self.to_pit = to_pit
-        self.characters = characters
+        self.character = character
 
     def print_desc(self):
         return self.desc
@@ -38,14 +38,15 @@ class Player(object):
 
     def weapon_default(self):
         possible_weapons = []
-        for i in range(len(player.inventory)):
+        y = 0
+        for gg in range(len(player.inventory)):
             if issubclass(type(self.inventory[i], Weapon)) is True:
                 possible_weapons.append(self.inventory[i])
-                y = i
+                y = gg
         if len(possible_weapons) == 0:
             self.weapon = self.inventory[y]
 
-    def take_damage(self, damage, int):
+    def take_damage(self, damage):
         if self.armor > damage:
             self.armor -= damage
             print("The attack smashes into your armor! your armor has "
@@ -73,23 +74,23 @@ class Player(object):
             print("You cannot attack! You do not have a weapon.")
 
     def armor_check(self):
-        for i in range(len(self.inventory)):
-            if issubclass(type(self.inventory[i]), Armor) is True:
+        for gg in range(len(self.inventory)):
+            if issubclass(type(self.inventory[gg]), Armor) is True:
                 # Helmet
-                if self.inventory[i].part == 1 and self.helm is False:
-                    self.hm = self.inventory[i].hp
+                if self.inventory[gg].part == 1 and self.helm is False:
+                    self.hm = self.inventory[gg].hp
                     self.helm = True
                 # Chestplate
-                if self.inventory[i].part == 2 and self.chest is False:
-                    self.cp = self.inventory[i].hp
+                if self.inventory[gg].part == 2 and self.chest is False:
+                    self.cp = self.inventory[gg].hp
                     self.chest = True
                 # Leggings
-                if self.inventory[i].part == 3 and self.leg is False:
-                    self.lg = self.inventory[i].hp
+                if self.inventory[gg].part == 3 and self.leg is False:
+                    self.lg = self.inventory[gg].hp
                     self.leg = True
                 # Boots
-                if self.inventory[i].part == 4 and self.boot is False:
-                    self.bt = self.inventory[i].hp
+                if self.inventory[gg].part == 4 and self.boot is False:
+                    self.bt = self.inventory[gg].hp
                     self.boot = True
         self.armor = self.hm + self.cp + self.lg + self.bt
 
@@ -743,6 +744,8 @@ short_directions = ['n', 's', 'e', 'w', 'u', 'd']
 misc_comm = ["to_pit"]
 short_mc = ["pit"]
 event = False
+fighting = False
+invisible = False
 while playing:
     if event is False:
         print(player.current_location.name)
@@ -785,21 +788,31 @@ while playing:
             except TypeError:
                 pass
     # ---------------------------------
+        if player.current_location.character is not None:
+            fighting = True
         command = input(">_")
+# Short Command Converter
         if command.lower() in short_directions:
             index = short_directions.index(command.lower())
             command = directions[index]
+# Misc Short Command Converter
         elif command.lower() in short_mc:
             index = short_mc.index(command.lower())
             command = misc_comm[index]
+# Quit
         if command.lower() in ['q', 'quit', 'exit']:
             playing = False
+# Move
         elif command.lower() in directions or command.lower() in misc_comm:
-            try:
-                next_room = player.find_next_room(command.lower())
-                player.move(next_room)
-            except KeyError:
-                print("I can't go that way.")
+            if not fighting:
+                try:
+                    next_room = player.find_next_room(command.lower())
+                    player.move(next_room)
+                except KeyError:
+                    print("I can't go that way.")
+            else:
+                print("I can't run, there is an enemy here.")
+# Take
         elif command.lower()[0:4] == "take":
             event = True
             command1 = "take"
@@ -814,35 +827,50 @@ while playing:
                         print(player.current_location.item[itemindex].name + " has been added to your inventory.")
                         player.current_location.item.pop(itemindex)
                         grabbed = True
-                else:
-                    print("That item is not here.")
+                    else:
+                        print("That item is not here.")
             except TypeError:
                 print("There is nothing to pick up.")
+# Inventory
         elif command.lower() == "inventory":
             event = True
             for i in range(len(player.inventory)):
                 print(player.inventory[i].name)
+# Describe
         elif command.lower() == "describe":
             event = False
+# Attack
+        elif command.lower()[0:6] == "attack":
+            pass
         else:
             event = True
             print("Command Not Found")
     else:
+        if player.current_location.character is not None:
+            fighting = True
         command = input(">_")
+# Short Command Converter
         if command.lower() in short_directions:
             index = short_directions.index(command.lower())
             command = directions[index]
+# Misc Short Command Converter
         elif command.lower() in short_mc:
             index = short_mc.index(command.lower())
             command = misc_comm[index]
+# Quit
         if command.lower() in ['q', 'quit', 'exit']:
             playing = False
+# Move
         elif command.lower() in directions or command.lower() in misc_comm:
-            try:
-                next_room = player.find_next_room(command.lower())
-                player.move(next_room)
-            except KeyError:
-                print("I can't go that way.")
+            if not fighting:
+                try:
+                    next_room = player.find_next_room(command.lower())
+                    player.move(next_room)
+                except KeyError:
+                    print("I can't go that way.")
+            else:
+                print("I can't run, there is an enemy here.")
+# Take
         elif command.lower()[0:4] == "take":
             event = True
             command1 = "take"
@@ -857,16 +885,21 @@ while playing:
                         print(player.current_location.item[itemindex].name + " has been added to your inventory.")
                         player.current_location.item.pop(itemindex)
                         grabbed = True
-                else:
-                    print("That item is not here.")
+                    else:
+                        print("That item is not here.")
             except TypeError:
                 print("There is nothing to pick up.")
+# Inventory
         elif command.lower() == "inventory":
             event = True
             for i in range(len(player.inventory)):
                 print(player.inventory[i].name)
+# Describe
         elif command.lower() == "describe":
             event = False
+# Attack
+        elif command.lower()[0:6] == "attack":
+            pass
         else:
             event = True
             print("Command Not Found")
