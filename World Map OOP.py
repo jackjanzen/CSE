@@ -23,7 +23,7 @@ class Room(object):
 class Player(object):
     def __init__(self, starting_location):
         self.current_location = starting_location
-        self.inventory = [helmet, chestplate, leggings, boots]
+        self.inventory = []
         self.health = 100
         self.hm = 0
         self.cp = 0
@@ -35,16 +35,6 @@ class Player(object):
         self.leg = False
         self.boot = False
         self.weapon = None
-
-    def weapon_default(self):
-        possible_weapons = []
-        y = 0
-        for gg in range(len(player.inventory)):
-            if issubclass(type(self.inventory[i], Weapon)) is True:
-                possible_weapons.append(self.inventory[i])
-                y = gg
-        if len(possible_weapons) == 0:
-            self.weapon = self.inventory[y]
 
     def take_damage(self, damage):
         if self.armor > damage:
@@ -283,7 +273,7 @@ met Al Capone and learned the ways of running the world through organized crime.
 Heisenwiebe rules with an iron fist. I am Dr. Wiebature, and I need your help. When he took
 over, I attempted to shut the rift to stop his advances, but by the time I succeeded, he
 already learned enough to take over the planet. I know that he has hidden the key to stopping
-him somewhere underground, but i am far too old to keep searching. Please brave adventurer,
+him somewhere underground, but I am far too old to keep searching. Please brave adventurer,
 finish what I could not, and take back the land that should be ruled with peace, not terror.
         Sincerely,
             D.W.
@@ -301,7 +291,7 @@ class Enemy(object):
         self.armor = armor
         self.desc = desc
 
-    def take_damage(self, damage, int):
+    def take_damage(self, damage):
         if self.armor > damage:
             self.armor -= damage
             print("The attack smashes into %s's armor! %s's armor has "
@@ -823,12 +813,19 @@ while playing:
                 for i in range(len(player.current_location.item)):
                     if player.current_location.item[i - 1].name.lower() == thing.lower():
                         itemindex = i - 1
-                        player.inventory.append(player.current_location.item[itemindex])
+                        if issubclass(type(player.current_location.item[itemindex]), Weapon) is True:
+                            if player.weapon is None:
+                                player.weapon = player.current_location.item[itemindex]
+                            else:
+                                print("You dropped your %s." % player.weapon.name)
+                                player.current_location.item.append(player.weapon)
+                                player.weapon = player.current_location.item[itemindex]
+                        player.inventory.insert(0, player.current_location.item[itemindex])
                         print(player.current_location.item[itemindex].name + " has been added to your inventory.")
                         player.current_location.item.pop(itemindex)
                         grabbed = True
-                    else:
-                        print("That item is not here.")
+                if grabbed is False:
+                    print("That item is not here.")
             except TypeError:
                 print("There is nothing to pick up.")
 # Inventory
@@ -841,26 +838,30 @@ while playing:
             event = False
 # Attack
         elif command.lower()[0:6] == "attack":
-            pass
+            attack_list = command.lower().split(" ")
+            targ = attack_list[1:]
+
         else:
             event = True
             print("Command Not Found")
+# ----------------------------------------------
+# Skip Description
     else:
         if player.current_location.character is not None:
             fighting = True
         command = input(">_")
-# Short Command Converter
+        # Short Command Converter
         if command.lower() in short_directions:
             index = short_directions.index(command.lower())
             command = directions[index]
-# Misc Short Command Converter
+        # Misc Short Command Converter
         elif command.lower() in short_mc:
             index = short_mc.index(command.lower())
             command = misc_comm[index]
-# Quit
+        # Quit
         if command.lower() in ['q', 'quit', 'exit']:
             playing = False
-# Move
+        # Move
         elif command.lower() in directions or command.lower() in misc_comm:
             if not fighting:
                 try:
@@ -870,7 +871,7 @@ while playing:
                     print("I can't go that way.")
             else:
                 print("I can't run, there is an enemy here.")
-# Take
+        # Take
         elif command.lower()[0:4] == "take":
             event = True
             command1 = "take"
@@ -881,25 +882,34 @@ while playing:
                 for i in range(len(player.current_location.item)):
                     if player.current_location.item[i - 1].name.lower() == thing.lower():
                         itemindex = i - 1
-                        player.inventory.append(player.current_location.item[itemindex])
+                        if issubclass(type(player.current_location.item[itemindex]), Weapon) is True:
+                            if player.weapon is None:
+                                player.weapon = player.current_location.item[itemindex]
+                            else:
+                                print("You dropped your %s." % player.weapon.name)
+                                player.current_location.item.append(player.weapon)
+                                player.weapon = player.current_location.item[itemindex]
+                        player.inventory.insert(0, player.current_location.item[itemindex])
                         print(player.current_location.item[itemindex].name + " has been added to your inventory.")
                         player.current_location.item.pop(itemindex)
                         grabbed = True
-                    else:
-                        print("That item is not here.")
+                if grabbed is False:
+                    print("That item is not here.")
             except TypeError:
                 print("There is nothing to pick up.")
-# Inventory
+        # Inventory
         elif command.lower() == "inventory":
             event = True
             for i in range(len(player.inventory)):
                 print(player.inventory[i].name)
-# Describe
+        # Describe
         elif command.lower() == "describe":
             event = False
-# Attack
+        # Attack
         elif command.lower()[0:6] == "attack":
-            pass
+            attack_list = command.lower().split(" ")
+            targ = attack_list[1:]
+
         else:
             event = True
             print("Command Not Found")
