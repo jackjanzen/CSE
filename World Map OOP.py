@@ -34,7 +34,7 @@ class Player(object):
         self.chest = False
         self.leg = False
         self.boot = False
-        self.weapon = None
+        self.weapon = Longsword()
 
     def take_damage(self, damage):
         if self.armor > damage:
@@ -308,6 +308,7 @@ class Enemy(object):
         print("%s has %d health left." % (self.name, self.health))
 
     def attack(self, target):
+        print(self.weapon)
         try:
             print("%s attacks %s for %d damage" % (self.name, target.name, self.weapon.damage))
             if random.randint(1, 100) <= self.weapon.dodge:
@@ -656,7 +657,7 @@ SCNHALL = Room("South Chamber | North Hall", "Some guy that puts milk in before 
                                              "To the East and West, there are two hallways. They curve to the south,"
                                              " but you can't see any "
                                              "light coming from "
-                                             "there.", None, [ccdeny1, flat1], 'BOTOFPIT', None, 'NCEHALL', 'NCWHALL',
+                                             "there.", None, [ccdeny1, flat1], 'BOTOFPIT', None, 'SCEHALL', 'SCWHALL',
                None, None, None)
 SCWHALL = Room("South Chamber | West Hall", "Two Flat Earthers block your path. As soon as you walk into the room,"
                                             " they tell you about themselves. It's a married vegan couple named"
@@ -795,13 +796,16 @@ while playing:
 # Move
         elif command.lower() in directions or command.lower() in misc_comm:
             if not fighting:
+                event = False
                 try:
                     next_room = player.find_next_room(command.lower())
                     player.move(next_room)
                 except KeyError:
                     print("I can't go that way.")
+                    event = True
             else:
                 print("I can't run, there is an enemy here.")
+                event = True
 # Take
         elif command.lower()[0:4] == "take":
             event = True
@@ -839,37 +843,53 @@ while playing:
         elif command.lower() == "describe":
             event = False
 # Attack
-#         elif command.lower()[0:6] == "attack":
-#             attack_list = command.lower().split(" ")
-#             targ = attack_list[1:]
-#             targe = ""
-#             for i in range(len(targ)):
-#                 targe += targ[i] + " "
-#             for i in range(len(player.current_location.character)):
-#                 if player.current_location.character[i].name + " " == targe:
-# # I NEED ALEX AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA THIS WILL BE THE DEATH OF ME
+        elif command.lower()[0:6] == "attack":
+            attack_list = command.lower().split()
+            targ = attack_list[1:]
+            targ = " ".join(targ)
+            targe = ""
+            for i in player.current_location.character:
+                print(i)
+                if i.name.lower() == targ:
+                    targ = i
+                    player.attack(targ)
+                    if targ.health <= 0:
+                        print(targ.name + " was killed!")
+                        player.current_location.character.remove(targ)
+                        if len(player.current_location.character) == 0:
+                            player.current_location.character = None
+                            fighting = False
+                    else:
+                        for x in player.current_location.character:
+                            x.attack(player)
+                            if player.health <= 0:
+                                print("You died. Thanks for playing!")
+                                playing = False
+                else:
+                    print("That enemy is not here.")
+                    event = True
 
+# # I NEED ALEX AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA THIS WILL BE THE DEATH OF ME
         else:
             event = True
             print("Command Not Found")
 # ----------------------------------------------
 # Skip Description
-    else:
         if player.current_location.character is not None:
             fighting = True
         command = input(">_")
-        # Short Command Converter
+# Short Command Converter
         if command.lower() in short_directions:
             index = short_directions.index(command.lower())
             command = directions[index]
-        # Misc Short Command Converter
+# Misc Short Command Converter
         elif command.lower() in short_mc:
             index = short_mc.index(command.lower())
             command = misc_comm[index]
-        # Quit
+# Quit
         if command.lower() in ['q', 'quit', 'exit']:
             playing = False
-        # Move
+# Move
         elif command.lower() in directions or command.lower() in misc_comm:
             if not fighting:
                 try:
@@ -877,9 +897,11 @@ while playing:
                     player.move(next_room)
                 except KeyError:
                     print("I can't go that way.")
+                    event = True
             else:
                 print("I can't run, there is an enemy here.")
-        # Take
+                event = True
+# Take
         elif command.lower()[0:4] == "take":
             event = True
             command1 = "take"
@@ -895,8 +917,10 @@ while playing:
                                 player.weapon = player.current_location.item[itemindex]
                             else:
                                 print("You dropped your %s." % player.weapon.name)
-                                player.current_location.item.append(player.weapon)
+                                vary = player.weapon
                                 player.weapon = player.current_location.item[itemindex]
+                                player.current_location.item.append(vary)
+                                player.inventory.remove(vary)
                         player.inventory.insert(0, player.current_location.item[itemindex])
                         print(player.current_location.item[itemindex].name + " has been added to your inventory.")
                         player.current_location.item.pop(itemindex)
@@ -905,19 +929,44 @@ while playing:
                     print("That item is not here.")
             except TypeError:
                 print("There is nothing to pick up.")
-        # Inventory
+# Inventory
         elif command.lower() == "inventory":
             event = True
             for i in range(len(player.inventory)):
                 print(player.inventory[i].name)
-        # Describe
+# Describe
         elif command.lower() == "describe":
             event = False
-        # Attack
+# Attack
         elif command.lower()[0:6] == "attack":
-            attack_list = command.lower().split(" ")
+            attack_list = command.lower().split()
             targ = attack_list[1:]
+            targ = " ".join(targ)
+            targe = ""
+            attacked = False
+            for i in player.current_location.character:
+                print(i)
+                if i.name.lower() == targ:
+                    targ = i
+                    player.attack(targ)
+                    attacked = True
+                    if targ.health <= 0 and attacked is True:
+                        print(targ.name + " was killed!")
+                        player.current_location.character.remove(targ)
+                        if len(player.current_location.character) == 0:
+                            player.current_location.character = None
+                            fighting = False
+                    else:
+                        for x in player.current_location.character:
+                            x.attack(player)
+                            if player.health <= 0:
+                                print("You died. Thanks for playing!")
+                                playing = False
+            if attacked is False:
+                print("That enemy is not here.")
+                event = True
 
+# # I NEED ALEX AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA THIS WILL BE THE DEATH OF ME
         else:
             event = True
             print("Command Not Found")
