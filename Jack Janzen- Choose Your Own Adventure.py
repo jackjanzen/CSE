@@ -308,9 +308,8 @@ class Enemy(object):
         print("%s has %d health left." % (self.name, self.health))
 
     def attack(self, target):
-        print(self.weapon)
         try:
-            print("%s attacks %s for %d damage" % (self.name, target.name, self.weapon.damage))
+            print("%s attacks you for %d damage" % (self.name, self.weapon.damage))
             if random.randint(1, 100) <= self.weapon.dodge:
                 target.take_damage(self.weapon.damage)
                 self.weapon.durability -= 1
