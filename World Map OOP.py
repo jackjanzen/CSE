@@ -322,13 +322,13 @@ class Enemy(object):
 
 class Flat(Enemy):
     def __init__(self, num):
-        super(Flat, self).__init__("", 50, Broadsword(), 0, "A Flat Earther blocks your path.")
+        super(Flat, self).__init__("", 50, tibroadsword, 0, "A Flat Earther blocks your path.")
         self.name = "Flat Earther " + str(num)
 
 
 class CCDeny(Enemy):
     def __init__(self, num):
-        super(CCDeny, self).__init__("", 100, Longsword(), 0, "A Climate Change Denier blocks your path.")
+        super(CCDeny, self).__init__("", 100, tilongsword, 0, "A Climate Change Denier blocks your path.")
         self.name = "Climate Change Denier " + str(num)
 
 
@@ -587,7 +587,8 @@ WOFPIT = Room("West of Pit", "You stand in a clearing with a pit in the center. 
                              " the dark spires of a castle. "
                              "\nOn the ground beside you there is a letter. You should probably "
                              "read it "
-                             "before going further.", [startpage], None, 'NOFPIT', 'SOFPIT', 'EOFPIT', None, None,
+                             "before going further. (Dont read it. Doesn't work.)", [startpage], None, 'NOFPIT',
+              'SOFPIT', 'EOFPIT', None, None,
               'UPOFPIT', 'EDGEOFPIT')
 NOFPIT = Room("North of Pit", "You can see more of the castle now. A large insignia is visible with the letters "
                               '"HW". \nColumns of smoke rise from the area behind the castle. They are extra'
@@ -632,17 +633,16 @@ BOTOFPIT = Room("Bottom of Pit", "You land on the wet stone floor at the bottom 
                                  "It was stupid to jump that far down and everything hurts."
                                  " If we're being realistic you'd be dead right now."
                                  " \nBut, for the plot's sake, you lived. "
-                                 "\nTo the west there is a bustling restaraunt with a sign over the door"
-                                 " that reads, 'Popeye's'. \nTo the south there is a dark room with strange noises"
-                                 " coming from it. It would be wise to have a light with you before entering."
+                                 "\nTo the south there is a dark room with strange noises"
+                                 " coming from it."
                                  " \nTo the east, there is a room with various pieces of "
-                                 "battle-ready equipment.", None, None, None, "SCNHALL", 'EQROOMPIT', 'PEPIT',
+                                 "battle-ready equipment.", None, None, None, "SCNHALL", 'EQROOMPIT', None,
                 None, None, None)
 PEPIT = Room("Popeye's", "The fluorescent lights on the ceiling make the restaurant impressively bright."
                          "\nThe smell of fried chicken fills the air. A nice lady is standing behind the counter."
                          " Perhaps you should ask her "
                          "about the nature of this "
-                         "whimsical place.", None, None, None, None, None, 'BOTOFPIT', None, None, None)
+                         "whimsical place.", None, None, None, None, None, None, None, None, None)
 EQROOMPIT = Room("Equipment Room", "There are various racks and armor stands arranged about the room."
                                    " Three swords are hung on one of the racks: a greatsword, a broadsword, and "
                                    "a longsword. \nYes, I use the Oxford "
@@ -848,11 +848,12 @@ while playing:
             targ = attack_list[1:]
             targ = " ".join(targ)
             targe = ""
+            attacked = False
             for i in player.current_location.character:
-                print(i)
                 if i.name.lower() == targ:
                     targ = i
                     player.attack(targ)
+                    attacked = True
                     if targ.health <= 0:
                         print(targ.name + " was killed!")
                         player.current_location.character.remove(targ)
@@ -865,14 +866,15 @@ while playing:
                             if player.health <= 0:
                                 print("You died. Thanks for playing!")
                                 playing = False
-                else:
-                    print("That enemy is not here.")
-                    event = True
+            if attacked is False:
+                print("That enemy is not here.")
+                event = True
         else:
             event = True
             print("Command Not Found")
 # ----------------------------------------------
 # Skip Description
+    else:
         if player.current_location.character is not None:
             fighting = True
         command = input(">_")
@@ -890,6 +892,7 @@ while playing:
 # Move
         elif command.lower() in directions or command.lower() in misc_comm:
             if not fighting:
+                event = False
                 try:
                     next_room = player.find_next_room(command.lower())
                     player.move(next_room)
@@ -943,12 +946,11 @@ while playing:
             targe = ""
             attacked = False
             for i in player.current_location.character:
-                print(i)
                 if i.name.lower() == targ:
                     targ = i
                     player.attack(targ)
                     attacked = True
-                    if targ.health <= 0 and attacked is True:
+                    if targ.health <= 0:
                         print(targ.name + " was killed!")
                         player.current_location.character.remove(targ)
                         if len(player.current_location.character) == 0:
@@ -963,6 +965,98 @@ while playing:
             if attacked is False:
                 print("That enemy is not here.")
                 event = True
+        else:
+            event = True
+            print("Command Not Found")
+        if player.current_location.character is not None:
+            fighting = True
+        command = input(">_")
+        # Short Command Converter
+        if command.lower() in short_directions:
+            index = short_directions.index(command.lower())
+            command = directions[index]
+        # Misc Short Command Converter
+        elif command.lower() in short_mc:
+            index = short_mc.index(command.lower())
+            command = misc_comm[index]
+        # Quit
+        if command.lower() in ['q', 'quit', 'exit']:
+            playing = False
+        # Move
+        elif command.lower() in directions or command.lower() in misc_comm:
+            if not fighting:
+                event = False
+                try:
+                    next_room = player.find_next_room(command.lower())
+                    player.move(next_room)
+                except KeyError:
+                    print("I can't go that way.")
+                    event = True
+            else:
+                print("I can't run, there is an enemy here.")
+                event = True
+        # Take
+        elif command.lower()[0:4] == "take":
+            event = True
+            command1 = "take"
+            jac = command.lower().split()
+            thing = " ".join(jac[1:])
+            try:
+                grabbed = False
+                for i in range(len(player.current_location.item)):
+                    if player.current_location.item[i - 1].name.lower() == thing.lower():
+                        itemindex = i - 1
+                        if issubclass(type(player.current_location.item[itemindex]), Weapon) is True:
+                            if player.weapon is None:
+                                player.weapon = player.current_location.item[itemindex]
+                            else:
+                                print("You dropped your %s." % player.weapon.name)
+                                vary = player.weapon
+                                player.weapon = player.current_location.item[itemindex]
+                                player.current_location.item.append(vary)
+                                player.inventory.remove(vary)
+                        player.inventory.insert(0, player.current_location.item[itemindex])
+                        print(player.current_location.item[itemindex].name + " has been added to your inventory.")
+                        player.current_location.item.pop(itemindex)
+                        grabbed = True
+                if grabbed is False:
+                    print("That item is not here.")
+            except TypeError:
+                print("There is nothing to pick up.")
+        # Inventory
+        elif command.lower() == "inventory":
+            event = True
+            for i in range(len(player.inventory)):
+                print(player.inventory[i].name)
+        # Describe
+        elif command.lower() == "describe":
+            event = False
+        # Attack
+        elif command.lower()[0:6] == "attack":
+            attack_list = command.lower().split()
+            targ = attack_list[1:]
+            targ = " ".join(targ)
+            targe = ""
+            for i in player.current_location.character:
+                print(i)
+                if i.name.lower() == targ:
+                    targ = i
+                    player.attack(targ)
+                    if targ.health <= 0:
+                        print(targ.name + " was killed!")
+                        player.current_location.character.remove(targ)
+                        if len(player.current_location.character) == 0:
+                            player.current_location.character = None
+                            fighting = False
+                    else:
+                        for x in player.current_location.character:
+                            x.attack(player)
+                            if player.health <= 0:
+                                print("You died. Thanks for playing!")
+                                playing = False
+                else:
+                    print("That enemy is not here.")
+                    event = True
         else:
             event = True
             print("Command Not Found")
