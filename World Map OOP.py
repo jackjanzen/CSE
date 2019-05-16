@@ -818,8 +818,10 @@ while playing:
                                 player.weapon = player.current_location.item[itemindex]
                             else:
                                 print("You dropped your %s." % player.weapon.name)
-                                player.current_location.item.append(player.weapon)
+                                vary = player.weapon
                                 player.weapon = player.current_location.item[itemindex]
+                                player.current_location.item.append(vary)
+                                player.inventory.remove(vary)
                         player.inventory.insert(0, player.current_location.item[itemindex])
                         print(player.current_location.item[itemindex].name + " has been added to your inventory.")
                         player.current_location.item.pop(itemindex)
@@ -837,9 +839,15 @@ while playing:
         elif command.lower() == "describe":
             event = False
 # Attack
-        elif command.lower()[0:6] == "attack":
-            attack_list = command.lower().split(" ")
-            targ = attack_list[1:]
+#         elif command.lower()[0:6] == "attack":
+#             attack_list = command.lower().split(" ")
+#             targ = attack_list[1:]
+#             targe = ""
+#             for i in range(len(targ)):
+#                 targe += targ[i] + " "
+#             for i in range(len(player.current_location.character)):
+#                 if player.current_location.character[i].name + " " == targe:
+# # I NEED ALEX AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA THIS WILL BE THE DEATH OF ME
 
         else:
             event = True
