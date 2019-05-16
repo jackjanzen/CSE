@@ -688,7 +688,7 @@ SCCENT = Room("South Chamber | Center", "Ben Shapiro himself blocks your path."
                                         ".\nTo the South there is a hallway."
                                         "", [greatsword, tileggings], [benshap], None, 'SCSHALL', None, None, None,
               None, None)
-NCEHALL = Room("North Chamber | East Hall", "x", None, [igor1, mob1], 'NCNHALL', 'NCSHALL', 'EQROOMPIT', None, None,
+NCEHALL = Room("North Chamber | East Hall", "x", None, [igor1, mob1], 'NCNHALL', 'NCSHALL', None, None, None,
                None, None)
 NCNHALL = Room("North Chamber | North Hall", "x", None, [igor2, mob2], None, None, 'NCEHALL', 'NCWHALL', None,
                None, None)
@@ -868,8 +868,6 @@ while playing:
                 else:
                     print("That enemy is not here.")
                     event = True
-
-# # I NEED ALEX AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA THIS WILL BE THE DEATH OF ME
         else:
             event = True
             print("Command Not Found")
@@ -965,8 +963,6 @@ while playing:
             if attacked is False:
                 print("That enemy is not here.")
                 event = True
-
-# # I NEED ALEX AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA THIS WILL BE THE DEATH OF ME
         else:
             event = True
             print("Command Not Found")
