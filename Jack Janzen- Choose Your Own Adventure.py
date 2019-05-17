@@ -126,6 +126,7 @@ class Broadsword(Weapon):
         super(Broadsword, self).__init__("Steel Broadsword", 34, 30, 75)
 
 
+
 class TIBroadsword(Weapon):
     def __init__(self):
         super(TIBroadsword, self).__init__("Tiger Iron Broadsword", 34, 40, 75)
@@ -641,10 +642,8 @@ BOTOFPIT = Room("Bottom of Pit", "You land on the wet stone floor at the bottom 
                                  "battle-ready equipment.", None, None, None, "SCNHALL", 'EQROOMPIT', None,
                 None, None, None)
 PEPIT = Room("Popeye's", "The fluorescent lights on the ceiling make the restaurant impressively bright."
-                         "\nThe smell of fried chicken fills the air. A nice lady is standing behind the counter."
-                         " Perhaps you should ask her "
-                         "about the nature of this "
-                         "whimsical place.", None, None, None, None, None, None, None, None, None)
+                         "\nThe smell of fried chicken fills the air. A sign on the wall reads:\n   Welcome to Popeye's"
+                         "", None, None, None, None, None, None, None, None, None)
 EQROOMPIT = Room("Equipment Room", "There are various racks and armor stands arranged about the room."
                                    " Three swords are hung on one of the racks: a greatsword, a broadsword, and "
                                    "a longsword. \nYes, I use the Oxford "
@@ -653,31 +652,26 @@ EQROOMPIT = Room("Equipment Room", "There are various racks and armor stands arr
                                    "northern wall.", [helmet, chestplate, leggings, boots, broadsword, greatsword,
                                                       longsword],
                                    None, 'NCEHALL', None, None, 'BOTOFPIT', None, None, None)
-SCNHALL = Room("South Chamber | North Hall", "Some guy that puts milk in before cereal blocks your path."
-                                             " No one knows why he does this, he just"
-                                             " does, and will argue with anyone that disagrees.\n"
+SCNHALL = Room("South Chamber | North Hall", "You enter into a dark, damp room. Moss clings to the stone walls, and"
+                                             " water drips from the ceiling.\nA fat droplet smacks your cheek."
                                              "To the East and West, there are two hallways. They curve to the south,"
                                              " but you can't see any "
                                              "light coming from "
                                              "there.", None, [ccdeny1, flat1], 'BOTOFPIT', None, 'SCEHALL', 'SCWHALL',
                None, None, None)
-SCWHALL = Room("South Chamber | West Hall", "Two Flat Earthers block your path. As soon as you walk into the room,"
-                                            " they tell you about themselves. It's a married vegan couple named"
-                                            " Marge and Ethan, \nwho have two children. \nWho are, of course,"
-                                            " unvaccinated.\nAfter getting into a heated debate with them"
-                                            " on the SHAPE OF THE EARTH, they begin to instigate a battle."
+SCWHALL = Room("South Chamber | West Hall", "As you move through the halls, the rooms begin to get warmer. Guess your"
+                                            " debates with all these idiots got pretty heated.\nNot my best joke.\n"
+                                            "But in all seriousness, the incessant ceiling drip has begun to slow. "
+                                            "It's almost as if it's evaporating before falling off the ceiling."
                                             "\nTo the North and the South, there are hallways."
                                             "", None, [ccdeny2, flat2], 'SCNHALL', 'SCSHALL', None, None, None, None,
                None)
-SCEHALL = Room("South Chamber | East Hall", "Two Flat Earthers block your path. As soon as you walk into the room,"
-                                            " they tell you about themselves. \nIt's a married couple named"
-                                            " John and Katherine, who have three children. Who are, of course,"
-                                            " unvaccinated. \nKatherine says that crystal therapy"
-                                            " is the only safe alternative to vaccines."
-                                            "\nWhat an idiot.\nAfter getting into a heated debate with them"
-                                            " on the SHAPE OF THE EARTH, they begin to instigate a battle."
-                                            "\nTo the North and the South, there are "
-                                            "hallways.", None, [ccdeny3, flat3], 'SCNHALL', 'SCSHALL', None,
+SCEHALL = Room("South Chamber | East Hall", "As you move through the halls, the rooms begin to get warmer. Guess your"
+                                            " debates with all these idiots got pretty heated.\nNot my best joke.\n"
+                                            "But in all seriousness, the incessant ceiling drip has begun to slow. "
+                                            "It's almost as if it's evaporating before falling off the ceiling."
+                                            "\nTo the North and the South, there are hallways."
+               , None, [ccdeny3, flat3], 'SCNHALL', 'SCSHALL', None,
                None, None, None, None)
 SCSHALL = Room("South Chamber | South Hall", "A Climate Change"
                                              "denier and a Flat Earther block your path. Need I say more?"
