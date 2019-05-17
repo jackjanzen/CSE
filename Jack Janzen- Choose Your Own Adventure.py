@@ -58,6 +58,7 @@ class Player(object):
             if random.randint(1, 100) <= self.weapon.dodge:
                 target.take_damage(self.weapon.damage)
                 self.weapon.durability -= 1
+                self.weapon.desc_check()
             else:
                 print("The attack missed!")
         except AttributeError:
@@ -192,6 +193,7 @@ class Armor(Item):
         self.hp = hp
         self.part = part
         self.crit = crit
+        self.desc = "Name: " + str(self.name) + " || Hit Points: " + str(self.hp)
 
 
 class Chestplate(Armor):
@@ -313,6 +315,7 @@ class Enemy(object):
             if random.randint(1, 100) <= self.weapon.dodge:
                 target.take_damage(self.weapon.damage)
                 self.weapon.durability -= 1
+                self.weapon.desc_check()
             else:
                 print("The attack missed!")
         except AttributeError:
@@ -756,6 +759,7 @@ while playing:
                         x = True
                         print("Items:")
                     print(player.current_location.item[i].name)
+                    print(player.current_location.item[i].desc)
                 x = False
             except TypeError:
                 pass
@@ -774,6 +778,7 @@ while playing:
                         x = True
                         print("Enemies:")
                     print(player.current_location.character[i].name)
+                    print(player.current_location.character[i].desc)
                 x = False
             except TypeError:
                 pass
