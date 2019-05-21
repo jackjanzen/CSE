@@ -1,4 +1,4 @@
-'''
+"""
 Titan was like most planets.
 Too many mouths, not enough to go around. And when we faced showcase,
 I offered a solution.
@@ -17,7 +17,7 @@ You know about lists. Me.
 But I never taught you to wing it.
 That's why you're so BAD AT IT.
 -----------------------------------
-Dread it, run from it. Showcase always arrives
+Dread it, run from it. Showcase always arrives.
 -----------------------------------
 Showcase is inevitable.
 -----------------------------------
@@ -25,4 +25,13 @@ I respect you, student. When I'm done, half of your grade will still be alive.
 I hope it remembers you.
 -----------------------------------
 You couldn't live with all the late work, and where did it lead you? Back to Wiebe.
-'''
+
+9:00 to 10:30
+or
+10:45 to 12:15 <------ Me
+computer #: 27
+
+fix armor_check function
+fix ben shapiro's immortality
+
+"""

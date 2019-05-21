@@ -34,23 +34,7 @@ class Player(object):
         self.chest = False
         self.leg = False
         self.boot = False
-        self.weapon = Longsword()
-
-    def take_damage(self, damage):
-        if self.armor > damage:
-            self.armor -= damage
-            print("The attack smashes into your armor! your armor has "
-                  "%d health left." % self.armor)
-        elif self.armor < damage > 0:
-            hadamage = damage - self.armor
-            print("The attack breaks your armor! %d damage gets through." % hadamage)
-            self.health -= hadamage
-        elif self.armor <= 0:
-            self.health -= damage
-            print("The attack hit for %d damage!" % (damage - self.armor))
-        if self.armor > 0:
-            print("")
-        print("You have %d health left." % self.health)
+        self.weapon = None
 
     def attack(self, target):
         try:
@@ -83,7 +67,23 @@ class Player(object):
                 if self.inventory[gg].part == 4 and self.boot is False:
                     self.bt = self.inventory[gg].hp
                     self.boot = True
-        self.armor = self.hm + self.cp + self.lg + self.bt
+
+    def take_damage(self, damage):
+        self.armor_check()
+        if self.armor > damage:
+            self.armor -= damage
+            print("The attack smashes into your armor! your armor has "
+                  "%d health left." % self.armor)
+        elif 0 < self.armor < damage:
+            hadamage = damage - self.armor
+            print("The attack breaks your armor! %d damage gets through." % hadamage)
+            self.health -= hadamage
+        elif self.armor <= 0:
+            self.health -= damage
+            print("The attack hit for %d damage!" % (damage - self.armor))
+        if self.armor > 0:
+            print("")
+        print("You have %d health left." % self.health)
 
     def move(self, new_location):
         """This moves the player to a new room.
@@ -300,7 +300,7 @@ class Enemy(object):
             self.armor -= damage
             print("The attack smashes into %s's armor! %s's armor has "
                   "%d health left." % (self.name, self.name, self.armor))
-        elif self.armor < damage > 0:
+        elif 0 < self.armor < damage:
             hadamage = damage - self.armor
             print("The attack breaks %s's armor! %d damage gets through." % (self.name, hadamage))
             self.health -= hadamage
@@ -326,83 +326,80 @@ class Enemy(object):
 
 class Flat(Enemy):
     def __init__(self, num):
-        super(Flat, self).__init__("", 50, tibroadsword, 0, "A Flat Earther blocks your path.")
+        super(Flat, self).__init__("", 50, tibroadsword, 0, None)
         self.name = "Flat Earther " + str(num)
+        self.desc = "%s blocks your path." % self.name
 
 
 class CCDeny(Enemy):
     def __init__(self, num):
-        super(CCDeny, self).__init__("", 100, tilongsword, 0, "A Climate Change Denier blocks your path.")
+        super(CCDeny, self).__init__("", 100, tilongsword, 0, None)
         self.name = "Climate Change Denier " + str(num)
+        self.desc = "%s blocks your path." % self.name
 
 
 class BenShap(Enemy):
     def __init__(self):
-        super(BenShap, self).__init__("Ben Shapiro", 100, Greatsword(), 200, "Ben Shapiro blocks your path."
-                                                                             " He tells you facts don't "
-                                                                             "care about your feelings.")
+        super(BenShap, self).__init__("Ben Shapiro", 100, Greatsword(), 200, None)
+        self.desc = "%s blocks your path. Fire leaps up around him as your heated " \
+                    "debate begins. He shouts in a booming, lightning fast voice that fact" % self.name
 
 
 class Igor(Enemy):
     def __init__(self, num):
-        super(Igor, self).__init__("", 100, Longsword(), 0, "Igor blocks your path. He tells you to rob the "
-                                                            "bar cart.")
+        super(Igor, self).__init__("", 100, Longsword(), 0, None)
         self.name = "Igor " + str(num)
+        self.desc = "%s blocks your path. He tells you to rob the bar cart." % self.name
 
 
 class Mob(Enemy):
     def __init__(self, num):
-        super(Mob, self).__init__("", 50, Broadsword(), 0, "A Russian Mobster blocks your path. He says "
-                                                           "'Igor! Rob the bar cart!'")
-        self.name = "Mobster " + str(num)
+        super(Mob, self).__init__("", 50, Broadsword(), 0, None)
+        self.name = "Russian Mobster " + str(num)
+        self.desc = "%s blocks your path. He says something in Russian. It didn't sound nice." % self.name
 
 
 class Bert(Enemy):
     def __init__(self):
-        super(Bert, self).__init__("The Machine", 100, BWGreatsword(), 125, "A shirtless fat man blocks your "
-                                                                            "path. "
-                                                                            "He keeps saying"
-                                                                            "'I am the machine'. He is totally "
-                                                                            "hammered and drunkenly"
-                                                                            " instigates a battle.")
+        super(Bert, self).__init__("The Machine", 100, BWGreatsword(), 125, None)
+        self.desc = "A shirtless fat man blocks your path. His real name is Bert, but calling himself '%s'" \
+                    " has been useful in befriending the Russians. \nHe drunkenly mutters something" \
+                    " and begins the fight." % self.name
 
 
 class Mobile(Enemy):
     def __init__(self, num):
-        super(Mobile, self).__init__("", 25, Longsword(), 0, "A Mobile Gamer blocks your path. He asks if you have"
-                                                             "games on your phone.")
+        super(Mobile, self).__init__("", 25, Longsword(), 0, None)
         self.name = "Mobile Gamer " + str(num)
+        self.desc = "%s blocks your path. He asks if you have games on your phone." % self.name
 
 
 class GeoGamer(Enemy):
     def __init__(self):
-        super(GeoGamer, self).__init__("Geometry Dash Gamer", 100, BWLongsword(), 50, "An avid Geometry Dash player"
-                                                                                      "blocks your path. He's"
-                                                                                      "humming 'Stereo Madness'.")
+        super(GeoGamer, self).__init__("Geometry Dash Gamer", 100, BWLongsword(), 50, None)
+        self.desc = "An avid %s blocks your path. He's humming 'Stereo Madness'." % self.name
 
 
 class Frostbite(Enemy):
     def __init__(self, num):
-        super(Frostbite, self).__init__("", 50, Broadsword(), 0, "What you get when you cross a vampire with a"
-                                                                 " snowman. A Frostbite blocks your path.")
+        super(Frostbite, self).__init__("", 50, Broadsword(), 0, None)
         self.name = "Frostbite " + str(num)
+        self.desc = "%s blocks your path. It's what you get when you cross a vampire with a snowman." % self.name
 
 
 class Untied(Enemy):
     def __init__(self, num):
-        super(Untied, self).__init__("", 100, Longsword(), 0, "I don't know what they're laced with, but they'll"
-                                                              " have you tripping all day. An Untied Shoe"
-                                                              " blocks your path.")
+        super(Untied, self).__init__("", 100, Longsword(), 0, None)
         self.name = "Untied Shoe " + str(num)
+        self.desc = "%s blocks your path. I don't know what it's laced with, but it'll have you tripping" \
+                    " all day." % self.name
 
 
 class Kyle(Enemy):
     def __init__(self):
-        super(Kyle, self).__init__("Kyle, King of Humor", 100, TILongsword(), 250, "It's Bad Joke Friday, but "
-                                                                                   "his jokes are so bad,"
-                                                                                   "they're going to "
-                                                                                   "send you back to Monday."
-                                                                                   " Kyle blocks your path.")
+        super(Kyle, self).__init__("Kyle, King of Humor", 100, TILongsword(), 250, None)
+        self.desc = "%s blocks your path. It's Bad Joke Friday, but his jokes are so bad, " \
+                    "they'll send you back to Monday." % self.name
 
 
 # inits
@@ -679,10 +676,9 @@ SCSHALL = Room("South Chamber | South Hall", "A Climate Change"
                                              "\nTo the East, West, and North there are hallways."
                                              "", None, [ccdeny4, flat4], 'SCCENT', None, 'SCEHALL', 'SCWHALL',
                None, None, None)
-SCCENT = Room("South Chamber | Center", "Ben Shapiro himself blocks your path."
-                                        "\n Rumor has it he ate 50,000 liberals in one sitting.\nWith his sharp wit,"
-                                        "he dumbfounds you with pure FACTS and LOGIC, and begins to instigate a battle"
-                                        ".\nTo the South there is a hallway."
+SCCENT = Room("South Chamber | Center", "It's insanely hot in this room. You could use some water, but Jack didn't"
+                                        " feel like adding in a thirst feature. \nOr water for that matter."
+                                        "\nTo the South there is a hallway."
                                         "", [greatsword, tileggings], [benshap], None, 'SCSHALL', None, None, None,
               None, None)
 NCEHALL = Room("North Chamber | East Hall", "x", None, [igor1, mob1], 'NCNHALL', 'NCSHALL', None, None, None,
@@ -721,7 +717,7 @@ WCCENT = Room("West Chamber | Center", "x", [tigreatsword], [geogamer, mobile21,
               'WCSHALL', None, None, None, None, None)
 
 # Player
-player = Player(WOFPIT)
+player = Player(SCCENT)
 
 current_location = player.current_location
 
@@ -846,6 +842,7 @@ while playing:
             event = False
 # Attack
         elif command.lower()[0:6] == "attack":
+            event = True
             attack_list = command.lower().split()
             targ = attack_list[1:]
             targ = " ".join(targ)
@@ -942,6 +939,7 @@ while playing:
             event = False
         # Attack
         elif command.lower()[0:6] == "attack":
+            event = True
             attack_list = command.lower().split()
             targ = attack_list[1:]
             targ = " ".join(targ)
