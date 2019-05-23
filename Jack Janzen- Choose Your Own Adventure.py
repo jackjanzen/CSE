@@ -342,7 +342,8 @@ class BenShap(Enemy):
     def __init__(self):
         super(BenShap, self).__init__("Ben Shapiro", 100, Greatsword(), 200, None)
         self.desc = "%s blocks your path. Fire leaps up around him as your heated " \
-                    "debate begins. He shouts in a booming, lightning fast voice that fact" % self.name
+                    "debate begins. He shouts in a booming, lightning fast voice that facts don't care about" \
+                    " your feelings." % self.name
 
 
 class Igor(Enemy):
@@ -363,7 +364,7 @@ class Bert(Enemy):
     def __init__(self):
         super(Bert, self).__init__("The Machine", 100, BWGreatsword(), 125, None)
         self.desc = "A shirtless fat man blocks your path. His real name is Bert, but calling himself '%s'" \
-                    " has been useful in befriending the Russians. \nHe drunkenly mutters something" \
+                    " has been useful in befriending the Russians. \nHe drunkenly mutters something in Russian" \
                     " and begins the fight." % self.name
 
 
@@ -717,7 +718,7 @@ WCCENT = Room("West Chamber | Center", "x", [tigreatsword], [geogamer, mobile21,
               'WCSHALL', None, None, None, None, None)
 
 # Player
-player = Player(SCCENT)
+player = Player(WOFPIT)
 
 current_location = player.current_location
 
@@ -868,6 +869,14 @@ while playing:
             if attacked is False:
                 print("That enemy is not here.")
                 event = True
+        elif command.lower()[0:3] == "use":
+            thang = command.lower().split()[1:]
+            thang = " ".join(thang)
+            for i in player.inventory:
+                if thang == player.inventory[i].name.lower():
+
+
+
         else:
             event = True
             print("Command Not Found")
