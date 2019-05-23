@@ -731,6 +731,7 @@ short_mc = ["pit"]
 event = False
 fighting = False
 invisible = False
+invisibility = 0
 while playing:
     if event is False:
         print(player.current_location.name)
@@ -778,6 +779,7 @@ while playing:
             except TypeError:
                 pass
     # ---------------------------------
+        if
         if player.current_location.character is not None:
             fighting = True
         command = input(">_")
@@ -874,9 +876,19 @@ while playing:
             thang = " ".join(thang)
             for i in player.inventory:
                 if thang == player.inventory[i].name.lower():
-
-
-
+                    if issubclass(type(player.inventory[i]), Potion) is True:
+                        # Health Potion 1
+                        if player.inventory[i].effect == 1:
+                            player.health += player.inventory[i].heal
+                        # Health Potion 2
+                        elif player.inventory[i].effect == 2:
+                            player.health += player.inventory[i].heal
+                        # Invisibility Potion
+                        elif player.inventory[i].effect == 3:
+                            invisibility = 5
+                        # Start Page
+                        elif player.inventory[i].name == "Welcome Page":
+                            print(player.inventory[i].script)
         else:
             event = True
             print("Command Not Found")
