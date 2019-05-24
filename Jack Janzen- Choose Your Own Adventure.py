@@ -25,16 +25,12 @@ class Player(object):
         self.current_location = starting_location
         self.inventory = []
         self.health = 100
-        self.hm = 0
-        self.cp = 0
-        self.lg = 0
-        self.bt = 0
-        self.armor = self.hm + self.cp + self.lg + self.bt
-        self.helm = False
-        self.chest = False
-        self.leg = False
-        self.boot = False
+        self.helm = None
+        self.chest = None
+        self.leg = None
+        self.boot = None
         self.weapon = None
+        self.armor = 0
 
     def attack(self, target):
         try:
@@ -49,41 +45,77 @@ class Player(object):
             print("You cannot attack! You do not have a weapon.")
 
     def armor_check(self):
-        for gg in range(len(self.inventory)):
-            if issubclass(type(self.inventory[gg]), Armor) is True:
-                # Helmet
-                if self.inventory[gg].part == 1 and self.helm is False:
-                    self.hm = self.inventory[gg].hp
-                    self.helm = True
-                # Chestplate
-                if self.inventory[gg].part == 2 and self.chest is False:
-                    self.cp = self.inventory[gg].hp
-                    self.chest = True
-                # Leggings
-                if self.inventory[gg].part == 3 and self.leg is False:
-                    self.lg = self.inventory[gg].hp
-                    self.leg = True
-                # Boots
-                if self.inventory[gg].part == 4 and self.boot is False:
-                    self.bt = self.inventory[gg].hp
-                    self.boot = True
+        # Helmet
+        if self.helm is None:
+            pass
+        else:
+            if self.helm.hp <= 0:
+                self.helm = None
+                print("Your helmet broke.")
+            self.armor += self.helm.hp
+        # Chestplate
+        if self.chest is None:
+            pass
+        else:
+            if self.chest.hp <= 0:
+                self.chest = None
+                print("Your chestplate broke.")
+            self.armor += self.chest.hp
+        # Leggings
+        if self.leg is None:
+            pass
+        else:
+            if self.leg.hp <= 0:
+                self.leg = None
+                print("Your leggings broke.")
+            self.armor += self.leg.hp
+        # Boots
+        if self.boot is None:
+            pass
+        else:
+            if self.boot.hp <= 0:
+                self.boot = None
+                print("Your boots broke.")
+            self.armor += self.boot.hp
 
     def take_damage(self, damage):
         self.armor_check()
-        if self.armor > damage:
-            self.armor -= damage
-            print("The attack smashes into your armor! your armor has "
-                  "%d health left." % self.armor)
-        elif 0 < self.armor < damage:
-            hadamage = damage - self.armor
-            print("The attack breaks your armor! %d damage gets through." % hadamage)
-            self.health -= hadamage
-        elif self.armor <= 0:
+        damaged = False
+        # Helmet
+        if self.helm is None:
+            pass
+        elif damaged is False:
+            self.helm.hp -= damage
+            damaged = True
+            self.armor_check()
+            print("The attack smashes into your helmet. Your helmet has %d HP left." % self.helm.hp)
+        # Boots
+        if self.boot is None:
+            pass
+        elif damaged is False:
+            self.boot.hp -= damage
+            damaged = True
+            self.armor_check()
+            print("The attack smashes into your boots. Your boots have %d HP left." % self.boot.hp)
+        # Leggings
+        if self.leg is None:
+            pass
+        elif damaged is False:
+            self.leg.hp -= damage
+            damaged = True
+            self.armor_check()
+            print("The attack smashes into your leggings. Your leggings have %d HP left." % self.leg.hp)
+        # Chestplate
+        if self.chest is None:
+            pass
+        elif damaged is False:
+            self.chest.hp -= damage
+            damaged = True
+            self.armor_check()
+            print("The attack smashes into your chestplate. Your chestplate has %d HP left." % self.chest.hp)
+        if damaged is False and self.helm is None and self.chest is None and self.leg is None and self.boot is None:
             self.health -= damage
-            print("The attack hit for %d damage!" % (damage - self.armor))
-        if self.armor > 0:
-            print("")
-        print("You have %d health left." % self.health)
+            print("You took %d damage. You are at %d health" % (damage, self.health))
 
     def move(self, new_location):
         """This moves the player to a new room.
@@ -300,15 +332,13 @@ class Enemy(object):
             self.armor -= damage
             print("The attack smashes into %s's armor! %s's armor has "
                   "%d health left." % (self.name, self.name, self.armor))
-        elif 0 < self.armor < damage:
+        elif 0 <= self.armor <= damage:
             hadamage = damage - self.armor
             print("The attack breaks %s's armor! %d damage gets through." % (self.name, hadamage))
             self.health -= hadamage
         elif self.armor <= 0:
             self.health -= damage
             print("The attack hit for %d damage!" % (damage - self.armor))
-        if self.armor > 0:
-            print("")
         print("%s has %d health left." % (self.name, self.health))
 
     def attack(self, target):
@@ -647,10 +677,10 @@ EQROOMPIT = Room("Equipment Room", "There are various racks and armor stands arr
                                    " Three swords are hung on one of the racks: a greatsword, a broadsword, and "
                                    "a longsword. \nYes, I use the Oxford "
                                    "Comma.\nThere is an armor stand. It has armor on it. "
-                                   "\nThere is a locked gate on the "
+                                   "\nThere is an open gate on the "
                                    "northern wall.", [helmet, chestplate, leggings, boots, broadsword, greatsword,
-                                                      longsword],
-                                   None, 'NCEHALL', None, None, 'BOTOFPIT', None, None, None)
+                                                      longsword, h2potion1, hpotion1],
+                 None, 'NCEHALL', None, None, 'BOTOFPIT', None, None, None)
 SCNHALL = Room("South Chamber | North Hall", "You enter into a dark, damp room. Moss clings to the stone walls, and"
                                              " water drips from the ceiling.\nA fat droplet smacks your cheek."
                                              "To the East and West, there are two hallways. They curve to the south,"
@@ -663,34 +693,58 @@ SCWHALL = Room("South Chamber | West Hall", "As you move through the halls, the 
                                             "But in all seriousness, the incessant ceiling drip has begun to slow. "
                                             "It's almost as if it's evaporating before falling off the ceiling."
                                             "\nTo the North and the South, there are hallways."
-                                            "", None, [ccdeny2, flat2], 'SCNHALL', 'SCSHALL', None, None, None, None,
+                                            "", [hpotion2], [ccdeny2, flat2], 'SCNHALL', 'SCSHALL', None, None, None, None,
                None)
 SCEHALL = Room("South Chamber | East Hall", "As you move through the halls, the rooms begin to get warmer. Guess your"
                                             " debates with all these idiots got pretty heated.\nNot my best joke.\n"
                                             "But in all seriousness, the incessant ceiling drip has begun to slow. "
                                             "It's almost as if it's evaporating before falling off the ceiling."
-                                            "\nTo the North and the South, there are hallways."
-               , None, [ccdeny3, flat3], 'SCNHALL', 'SCSHALL', None,
+                                            "\nTo the North and the South, there are hallways.",
+               hpotion3, [ccdeny3, flat3], 'SCNHALL', 'SCSHALL', None,
                None, None, None, None)
-SCSHALL = Room("South Chamber | South Hall", "A Climate Change"
-                                             "denier and a Flat Earther block your path. Need I say more?"
+SCSHALL = Room("South Chamber | South Hall", "It's getting very hot now. You press your hand against the back of the"
+                                             " North door. It seems like the heat is coming from there."
                                              "\nTo the East, West, and North there are hallways."
                                              "", None, [ccdeny4, flat4], 'SCCENT', None, 'SCEHALL', 'SCWHALL',
                None, None, None)
 SCCENT = Room("South Chamber | Center", "It's insanely hot in this room. You could use some water, but Jack didn't"
                                         " feel like adding in a thirst feature. \nOr water for that matter."
                                         "\nTo the South there is a hallway."
-                                        "", [greatsword, tileggings], [benshap], None, 'SCSHALL', None, None, None,
+                                        "", [greatsword, tileggings, h2potion2, hpotion3], [benshap], None, 'SCSHALL', None, None, None,
               None, None)
-NCEHALL = Room("North Chamber | East Hall", "x", None, [igor1, mob1], 'NCNHALL', 'NCSHALL', None, None, None,
+NCEHALL = Room("North Chamber | East Hall", "You can faintly hear Rasputin by Boney M."
+                                            " playing off in the distance."
+                                            "\nWhat an amazing song. Absolute masterpiece. You just want to dance"
+                                            " your heart out. Too bad you're trying to save the world."
+                                            "\nTo the North and South, there are hallways.", [hpotion4], [igor1, mob1],
+               'NCNHALL', 'NCSHALL', 'EQROOMPIT', None, None,
                None, None)
-NCNHALL = Room("North Chamber | North Hall", "x", None, [igor2, mob2], None, None, 'NCEHALL', 'NCWHALL', None,
+NCNHALL = Room("North Chamber | North Hall", "Rasputin is getting louder the farther you advance through"
+                                             "the chamber. It's a great song, but its starting to get annoying."
+                                             "\nYou can also see increasing amounts of broken vodka"
+                                             " bottles on the ground.\nOh, those Russians. \nTo the "
+                                             "East and West, there are hallways.", None,
+               [igor2, mob2], None, None, 'NCEHALL', 'NCWHALL', None,
                None, None)
-NCSHALL = Room("North Chamber | South Hall", "x", None, [igor3, mob3], None, None, 'NCEHALL', 'NCWHALL', None,
+NCSHALL = Room("North Chamber | South Hall", "Rasputin is getting louder the farther you advance through"
+                                             " the chamber. It's a great song, but its starting to get annoying."
+                                             "\nYou can also see increasing amounts of broken vodka"
+                                             " bottles on the ground.\nOh, those Russians. \nTo the "
+                                             "East and West, there are hallways.", None, [igor3, mob3], None,
+               None, 'NCEHALL', 'NCWHALL', None,
                None, None)
-NCWHALL = Room("North Chamber | West Hall", "x", None, [igor4, mob4], 'NCNHALL', 'NCSHALL', 'NCCENT', None,
+NCWHALL = Room("North Chamber | West Hall", "Moskau is playing VERY loudly now. Funnily enough, Moskau is by a German"
+                                            " band. Strange, huh?\nIf hearing damage were programmed in to this "
+                                            "game then I'd tell you "
+                                            "to bring earplugs before going in the room in front of you. "
+                                            "\nTo the North and South there are hallways.",
+               None, [igor4, mob4], 'NCNHALL', 'NCSHALL', 'NCCENT', None,
                None, None, None)
-NCCENT = Room("North Chamber | Center", "x", [bwlongsword, tiboots], [bert], None, 'PENC', 'LDLABS', 'NCWHALL',
+NCCENT = Room("North Chamber | Center", "Russian Hardbass has started blasting out of two massive subwoofers "
+                                        "in opposite corners of the room. "
+                                        "\nIt hurts to listen to, but you have the sudden "
+                                        "urge to slav squat. \nTo the East there is a hallway.",
+              [bwlongsword, tiboots, h2potion3], [bert], None, 'PENC', 'LDLABS', 'NCWHALL',
               None, None, None)
 PENC = Room("Popeye's", "x", None, None, 'NCCENT', None, None, None, None, None, None)
 LDLABS = Room("Long's Drugs", "x", None, None, None, 'WBTURE', None, 'NCCENT', None, None, None)
@@ -718,7 +772,7 @@ WCCENT = Room("West Chamber | Center", "x", [tigreatsword], [geogamer, mobile21,
               'WCSHALL', None, None, None, None, None)
 
 # Player
-player = Player(WOFPIT)
+player = Player(SCCENT)
 
 current_location = player.current_location
 
@@ -736,7 +790,7 @@ while playing:
     if event is False:
         print(player.current_location.name)
         print(player.current_location.desc)
-    # --------------DEBUG--------------
+        # --------------DEBUG--------------
         try:
             if len(player.current_location.item) is 0:
                 player.current_location.item = None
@@ -778,125 +832,23 @@ while playing:
                 x = False
             except TypeError:
                 pass
-    # ---------------------------------
-        if
-        if player.current_location.character is not None:
-            fighting = True
-        command = input(">_")
-# Short Command Converter
-        if command.lower() in short_directions:
-            index = short_directions.index(command.lower())
-            command = directions[index]
-# Misc Short Command Converter
-        elif command.lower() in short_mc:
-            index = short_mc.index(command.lower())
-            command = misc_comm[index]
-# Quit
-        if command.lower() in ['q', 'quit', 'exit']:
-            playing = False
-# Move
-        elif command.lower() in directions or command.lower() in misc_comm:
-            if not fighting:
-                event = False
-                try:
-                    next_room = player.find_next_room(command.lower())
-                    player.move(next_room)
-                except KeyError:
-                    print("I can't go that way.")
-                    event = True
-            else:
-                print("I can't run, there is an enemy here.")
-                event = True
-# Take
-        elif command.lower()[0:4] == "take":
-            event = True
-            command1 = "take"
-            jac = command.lower().split()
-            thing = " ".join(jac[1:])
-            try:
-                grabbed = False
-                for i in range(len(player.current_location.item)):
-                    if player.current_location.item[i - 1].name.lower() == thing.lower():
-                        itemindex = i - 1
-                        if issubclass(type(player.current_location.item[itemindex]), Weapon) is True:
-                            if player.weapon is None:
-                                player.weapon = player.current_location.item[itemindex]
-                            else:
-                                print("You dropped your %s." % player.weapon.name)
-                                vary = player.weapon
-                                player.weapon = player.current_location.item[itemindex]
-                                player.current_location.item.append(vary)
-                                player.inventory.remove(vary)
-                        player.inventory.insert(0, player.current_location.item[itemindex])
-                        print(player.current_location.item[itemindex].name + " has been added to your inventory.")
-                        player.current_location.item.pop(itemindex)
-                        grabbed = True
-                if grabbed is False:
-                    print("That item is not here.")
-            except TypeError:
-                print("There is nothing to pick up.")
-# Inventory
-        elif command.lower() == "inventory":
-            event = True
-            for i in range(len(player.inventory)):
-                print(player.inventory[i].name)
-# Describe
-        elif command.lower() == "describe":
-            event = False
-# Attack
-        elif command.lower()[0:6] == "attack":
-            event = True
-            attack_list = command.lower().split()
-            targ = attack_list[1:]
-            targ = " ".join(targ)
-            targe = ""
-            attacked = False
-            for i in player.current_location.character:
-                if i.name.lower() == targ:
-                    targ = i
-                    player.attack(targ)
-                    attacked = True
-                    if targ.health <= 0:
-                        print(targ.name + " was killed!")
-                        player.current_location.character.remove(targ)
-                        if len(player.current_location.character) == 0:
-                            player.current_location.character = None
-                            fighting = False
-                    else:
-                        for x in player.current_location.character:
-                            x.attack(player)
-                            if player.health <= 0:
-                                print("You died. Thanks for playing!")
-                                playing = False
-            if attacked is False:
-                print("That enemy is not here.")
-                event = True
-        elif command.lower()[0:3] == "use":
-            thang = command.lower().split()[1:]
-            thang = " ".join(thang)
-            for i in player.inventory:
-                if thang == player.inventory[i].name.lower():
-                    if issubclass(type(player.inventory[i]), Potion) is True:
-                        # Health Potion 1
-                        if player.inventory[i].effect == 1:
-                            player.health += player.inventory[i].heal
-                        # Health Potion 2
-                        elif player.inventory[i].effect == 2:
-                            player.health += player.inventory[i].heal
-                        # Invisibility Potion
-                        elif player.inventory[i].effect == 3:
-                            invisibility = 5
-                        # Start Page
-                        elif player.inventory[i].name == "Welcome Page":
-                            print(player.inventory[i].script)
+        # ---------------------------------
+        firstchecker = False
+        if invisibility <= 0:
+            invisible = False
+            if firstchecker:
+                print("Your invisiblity wore off.")
+                firstchecker = False
         else:
-            event = True
-            print("Command Not Found")
-# ----------------------------------------------
-# Skip Description
-    else:
-        if player.current_location.character is not None:
+            invisibility -= 1
+            if invisibility <= 0:
+                firstchecker = True
+            print("Your invisibility has %d turns left." % invisibility)
+            invisible = True
+        if player.current_location.character is not None and invisible is False:
             fighting = True
+        elif invisible:
+            fighting = False
         command = input(">_")
         # Short Command Converter
         if command.lower() in short_directions:
@@ -939,9 +891,50 @@ while playing:
                             else:
                                 print("You dropped your %s." % player.weapon.name)
                                 vary = player.weapon
-                                player.current_location.item.append(vary)
                                 player.weapon = player.current_location.item[itemindex]
+                                player.current_location.item.append(vary)
                                 player.inventory.remove(vary)
+                        if issubclass(type(player.current_location.item[itemindex]), Armor) is True:
+                            # Helmet
+                            if player.current_location.item[itemindex].part == 1:
+                                if player.helm is None:
+                                    player.helm = player.current_location.item[itemindex]
+                                else:
+                                    print("You dropped your %s." % player.helm.name)
+                                    vary = player.helm
+                                    player.helm = player.current_location.item[itemindex]
+                                    player.current_location.item.append(vary)
+                                    player.inventory.remove(vary)
+                            # Chestplate
+                            elif player.current_location.item[itemindex].part == 2:
+                                if player.chest is None:
+                                    player.chest = player.current_location.item[itemindex]
+                                else:
+                                    print("You dropped your %s." % player.chest.name)
+                                    vary = player.chest
+                                    player.chest = player.current_location.item[itemindex]
+                                    player.current_location.item.append(vary)
+                                    player.inventory.remove(vary)
+                            # Leggings
+                            elif player.current_location.item[itemindex].part == 3:
+                                if player.leg is None:
+                                    player.leg = player.current_location.item[itemindex]
+                                else:
+                                    print("You dropped your %s." % player.leg.name)
+                                    vary = player.leg
+                                    player.leg = player.current_location.item[itemindex]
+                                    player.current_location.item.append(vary)
+                                    player.inventory.remove(vary)
+                            # Boots
+                            elif player.current_location.item[itemindex].part == 4:
+                                if player.boot is None:
+                                    player.boot = player.current_location.item[itemindex]
+                                else:
+                                    print("You dropped your %s." % player.boot.name)
+                                    vary = player.boot
+                                    player.boot = player.current_location.item[itemindex]
+                                    player.current_location.item.append(vary)
+                                    player.inventory.remove(vary)
                         player.inventory.insert(0, player.current_location.item[itemindex])
                         print(player.current_location.item[itemindex].name + " has been added to your inventory.")
                         player.current_location.item.pop(itemindex)
@@ -986,6 +979,217 @@ while playing:
             if attacked is False:
                 print("That enemy is not here.")
                 event = True
+        # Use
+        elif command.lower()[0:3] == "use":
+            event = True
+            thang = command.lower().split()[1:]
+            thang = " ".join(thang)
+            found = False
+            for i in range(len(player.inventory)):
+                if thang == player.inventory[i].name.lower():
+                    found = True
+                    if issubclass(type(player.inventory[i]), Potion) is True:
+                        # Health Potion 1
+                        if player.inventory[i].effect == 1:
+                            player.health += player.inventory[i].heal
+                            print("You have been healed for %d health points." % player.inventory[i].heal)
+                        # Health Potion 2
+                        elif player.inventory[i].effect == 2:
+                            player.health += player.inventory[i].heal
+                            print("You have been healed for %d health points." % player.inventory[i].heal)
+                        # Invisibility Potion
+                        elif player.inventory[i].effect == 3:
+                            invisibility = 5
+                            invisible = True
+                            fighting = False
+                            print("You used an invisibility potion. It is active for 5 turns. Feel free to move between"
+                                  " rooms; the enemies can't see you.")
+                    # Start Page
+                    elif player.inventory[i].name == "Welcome Page":
+                        startpage.read()
+            if not found:
+                print("You don't have that item.")
+        else:
+            event = True
+            print("Command Not Found")
+    # ----------------------------------------------
+    # Skip Description
+    else:
+        firstchecker = False
+        if invisibility <= 0:
+            invisible = False
+            if firstchecker:
+                print("Your invisiblity wore off.")
+                firstchecker = False
+        else:
+            invisibility -= 1
+            if invisibility <= 0:
+                firstchecker = True
+            print("Your invisibility has %d turns left." % invisibility)
+            invisible = True
+        if player.current_location.character is not None and invisible is False:
+            fighting = True
+        elif invisible:
+            fighting = False
+        command = input(">_")
+        # Short Command Converter
+        if command.lower() in short_directions:
+            index = short_directions.index(command.lower())
+            command = directions[index]
+        # Misc Short Command Converter
+        elif command.lower() in short_mc:
+            index = short_mc.index(command.lower())
+            command = misc_comm[index]
+        # Quit
+        if command.lower() in ['q', 'quit', 'exit']:
+            playing = False
+        # Move
+        elif command.lower() in directions or command.lower() in misc_comm:
+            if not fighting:
+                event = False
+                try:
+                    next_room = player.find_next_room(command.lower())
+                    player.move(next_room)
+                except KeyError:
+                    print("I can't go that way.")
+                    event = True
+            else:
+                print("I can't run, there is an enemy here.")
+                event = True
+        # Take
+        elif command.lower()[0:4] == "take":
+            event = True
+            command1 = "take"
+            jac = command.lower().split()
+            thing = " ".join(jac[1:])
+            try:
+                grabbed = False
+                for i in range(len(player.current_location.item)):
+                    if player.current_location.item[i - 1].name.lower() == thing.lower():
+                        itemindex = i - 1
+                        if issubclass(type(player.current_location.item[itemindex]), Weapon) is True:
+                            if player.weapon is None:
+                                player.weapon = player.current_location.item[itemindex]
+                            else:
+                                print("You dropped your %s." % player.weapon.name)
+                                vary = player.weapon
+                                player.weapon = player.current_location.item[itemindex]
+                                player.current_location.item.append(vary)
+                                player.inventory.remove(vary)
+                        if issubclass(type(player.current_location.item[itemindex]), Armor) is True:
+                            # Helmet
+                            if player.current_location.item[itemindex].part == 1:
+                                if player.helm is None:
+                                    player.helm = player.current_location.item[itemindex]
+                                else:
+                                    print("You dropped your %s." % player.helm.name)
+                                    vary = player.helm
+                                    player.helm = player.current_location.item[itemindex]
+                                    player.current_location.item.append(vary)
+                                    player.inventory.remove(vary)
+                            # Chestplate
+                            elif player.current_location.item[itemindex].part == 2:
+                                if player.chest is None:
+                                    player.chest = player.current_location.item[itemindex]
+                                else:
+                                    print("You dropped your %s." % player.chest.name)
+                                    vary = player.chest
+                                    player.chest = player.current_location.item[itemindex]
+                                    player.current_location.item.append(vary)
+                                    player.inventory.remove(vary)
+                            # Leggings
+                            elif player.current_location.item[itemindex].part == 3:
+                                if player.leg is None:
+                                    player.leg = player.current_location.item[itemindex]
+                                else:
+                                    print("You dropped your %s." % player.leg.name)
+                                    vary = player.leg
+                                    player.leg = player.current_location.item[itemindex]
+                                    player.current_location.item.append(vary)
+                                    player.inventory.remove(vary)
+                            # Boots
+                            elif player.current_location.item[itemindex].part == 4:
+                                if player.boot is None:
+                                    player.boot = player.current_location.item[itemindex]
+                                else:
+                                    print("You dropped your %s." % player.boot.name)
+                                    vary = player.boot
+                                    player.boot = player.current_location.item[itemindex]
+                                    player.current_location.item.append(vary)
+                                    player.inventory.remove(vary)
+                        player.inventory.insert(0, player.current_location.item[itemindex])
+                        print(player.current_location.item[itemindex].name + " has been added to your inventory.")
+                        player.current_location.item.pop(itemindex)
+                        grabbed = True
+                if grabbed is False:
+                    print("That item is not here.")
+            except TypeError:
+                print("There is nothing to pick up.")
+        # Inventory
+        elif command.lower() == "inventory":
+            event = True
+            for i in range(len(player.inventory)):
+                print(player.inventory[i].name)
+        # Describe
+        elif command.lower() == "describe":
+            event = False
+        # Attack
+        elif command.lower()[0:6] == "attack":
+            event = True
+            attack_list = command.lower().split()
+            targ = attack_list[1:]
+            targ = " ".join(targ)
+            targe = ""
+            attacked = False
+            for i in player.current_location.character:
+                if i.name.lower() == targ:
+                    targ = i
+                    player.attack(targ)
+                    attacked = True
+                    if targ.health <= 0:
+                        print(targ.name + " was killed!")
+                        player.current_location.character.remove(targ)
+                        if len(player.current_location.character) == 0:
+                            player.current_location.character = None
+                            fighting = False
+                    else:
+                        for x in player.current_location.character:
+                            x.attack(player)
+                            if player.health <= 0:
+                                print("You died. Thanks for playing!")
+                                playing = False
+            if attacked is False:
+                print("That enemy is not here.")
+                event = True
+        elif command.lower()[0:3] == "use":
+            event = True
+            thang = command.lower().split()[1:]
+            thang = " ".join(thang)
+            found = False
+            for i in range(len(player.inventory)):
+                if thang == player.inventory[i].name.lower():
+                    found = True
+                    if issubclass(type(player.inventory[i]), Potion) is True:
+                        # Health Potion 1
+                        if player.inventory[i].effect == 1:
+                            player.health += player.inventory[i].heal
+                            print("You have been healed for %d health points." % player.inventory[i].heal)
+                        # Health Potion 2
+                        elif player.inventory[i].effect == 2:
+                            player.health += player.inventory[i].heal
+                            print("You have been healed for %d health points." % player.inventory[i].heal)
+                        # Invisibility Potion
+                        elif player.inventory[i].effect == 3:
+                            invisibility = 5
+                            invisible = True
+                            fighting = False
+                            print("You used an invisibility potion. It is active for 5 turns. Feel free to move between"
+                                  " rooms; the enemies can't see you.")
+                    # Start Page
+                    elif player.inventory[i].name == "Welcome Page":
+                        startpage.read()
+            if not found:
+                print("You don't have that item.")
         else:
             event = True
             print("Command Not Found")
